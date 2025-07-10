@@ -1,0 +1,35 @@
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import Navbar from "../Components/Navbar";
+import Sidebar from "../Components/Sidebar";
+
+export default function KanbanBoard() {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+
+  return (
+    <div className="w-screen h-screen overflow-hidden flex flex-col">
+      {/* Fixed Navbar */}
+      <Navbar toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
+
+      {/* Grid layout starts below fixed navbar */}
+      <div className="grid relative grid-cols-1 md:grid-cols-[16rem_1fr] flex-1 mt-16 overflow-hidden">
+        {/* Sidebar */}
+        <div
+          className={`${
+            isSidebarVisible ? "block" : "hidden"
+          } fixed top-16 left-0 z-40 w-2/3 h-[calc(100vh-4rem)]
+             
+            md:block md:static md:h-full md:w-full
+          `}
+        >
+          <Sidebar value={true} />
+        </div>
+
+        {/* Main content area — scrollable only */}
+        <div className="h-[calc(100vh-4rem)] overflow-auto w-full p-4">
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  );
+}
