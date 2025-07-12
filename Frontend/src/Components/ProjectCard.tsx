@@ -22,7 +22,7 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`relative w-full md:min-w-2xs  p-4 rounded shadow-md border overflow-hidden ${
+      className={`relative w-full md:min-w-2xs  p-4 rounded shadow-md border overflow-hidden hover:shadow-2xl  ${
         mode ? "bg-white border-black/10" : "bg-[#282828] border-black/75"
         }`}
       
