@@ -6,7 +6,7 @@ import type { RootState } from "../Redux/Reducers/rootReducer";
 
 export default function ProjectDashboard() {
   const Project = useSelector((state: RootState) => state.Project.projects);
-
+  const mode = useSelector((state:RootState)=> state.mode.mode)
   const ProStartEnd = () => {
     return Project.map(({ heading, startDate, deadline }) => ({
       heading,
@@ -52,7 +52,11 @@ export default function ProjectDashboard() {
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8">
-      <h1 className="font-roboto mb-4 text-xl border-b border-white/25 pb-3">
+      <h1
+        className={`font-roboto mb-4 text-xl border-b  pb-3 ${
+          mode ? "border-black/20" : "border-white/25"
+        }`}
+      >
         All Projects
       </h1>
 

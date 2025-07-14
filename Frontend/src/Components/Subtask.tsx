@@ -47,13 +47,21 @@ export default function Subtask() {
   return (
     <div className="p-4">
       <div className="flex md:flex-row flex-col gap-4">
-        <div className="border rounded p-4 w-full md:w-1/2">
+        <div className="border rounded p-4 w-full md:w-1/4">
           <h1 className="text-lg font-semibold">Total Completed</h1>
           <p className="text-2xl">{completed}</p>
         </div>
-        <div className="border rounded p-4 w-full md:w-1/2">
+        <div className="border rounded p-4 w-full md:w-1/4">
           <h1 className="text-lg font-semibold">In Review</h1>
           <p className="text-2xl">{review}</p>
+        </div>
+        <div className="border rounded p-4 w-full md:w-1/4">
+          <h1 className="text-lg font-semibold">In Progress</h1>
+          <p className="text-2xl">{progress}</p>
+        </div>
+        <div className="border rounded p-4 w-full md:w-1/4">
+          <h1 className="text-lg font-semibold">In completed</h1>
+          <p className="text-2xl">{completed}</p>
         </div>
       </div>
 

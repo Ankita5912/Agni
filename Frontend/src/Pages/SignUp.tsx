@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { auth } from "../firebase";
-// import { FirebaseError } from "firebase/app";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
+import { FirebaseError } from "firebase/app";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import { useSelector } from "react-redux";
 
@@ -33,16 +33,16 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
   } = useForm<SchemaType>({resolver: zodResolver(schema),});
 
   const submit = async(data: SchemaType) => {
-    // try {
-    //   await createUserWithEmailAndPassword(auth, data.email, data.password);
-    //   alert("successfully login")
-    // } catch (error: unknown) {
-    //   if (error instanceof FirebaseError) {
-    //     alert(error.message);
-    //   } else {
-    //     alert("An unexpected error occurred.");
-    //   }
-    // }
+    try {
+      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      alert("successfully login")
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        alert(error.message);
+      } else {
+        alert("An unexpected error occurred.");
+      }
+    }
     console.log(data)
   };
 

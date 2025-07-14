@@ -13,7 +13,7 @@ interface SidebarProp {
 export default function Sidebar({ value }: SidebarProp) {
   const mode = useSelector((state: RootState) => state.mode.mode);
   const [openIndex, setOpenIndex] = useState<number | null>(1);
-  const Project = useSelector((state :RootState)=> state.Project.projects)
+  const Project = useSelector((state: RootState) => state.Project.projects);
 
   const toggleSubitems = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -22,7 +22,7 @@ export default function Sidebar({ value }: SidebarProp) {
   interface SubItem {
     heading?: string;
     path: string;
-   }
+  }
 
   interface NavSubItem {
     text: string;
@@ -33,45 +33,43 @@ export default function Sidebar({ value }: SidebarProp) {
     icon: JSX.Element;
   }
 
-
   interface NavItem {
     NavsubItems: NavSubItem[];
     profile: string;
   }
 
-const navitems: NavItem = {
-  NavsubItems: [
-    {
-      text: "Dashboard",
-      isActive: false,
-      path: "/kanban/dashboard",
-      pathExists: true,
-      subitems: [],
-      icon: <LayoutDashboard size={16} />,
-    },
-    {
-      text: "Projects",
-      isActive: false,
-      path: "/kanban/project",
-      pathExists: false,
-      subitems: Project.map((proj) => ({
-        heading: proj.heading,
-        path: `/kanban/project/${proj.uuid}`,
-      })),
-      icon: <Rocket size={16} />,
-    },
-    {
-      text: "Teams",
-      isActive: false,
-      path: "/teams",
-      pathExists: false,
-      subitems: [],
-      icon: <Users size={16} />,
-    },
-  ],
-  profile: "",
-};
-
+  const navitems: NavItem = {
+    NavsubItems: [
+      {
+        text: "Dashboard",
+        isActive: false,
+        path: "/kanban/dashboard",
+        pathExists: true,
+        subitems: [],
+        icon: <LayoutDashboard size={16} />,
+      },
+      {
+        text: "Projects",
+        isActive: false,
+        path: "/kanban/project",
+        pathExists: false,
+        subitems: Project.map((proj) => ({
+          heading: proj.heading,
+          path: `/kanban/project/${proj.uuid}`,
+        })),
+        icon: <Rocket size={16} />,
+      },
+      {
+        text: "Teams",
+        isActive: false,
+        path: "/teams",
+        pathExists: false,
+        subitems: [],
+        icon: <Users size={16} />,
+      },
+    ],
+    profile: "",
+  };
 
   const [navsubItems, setNavsubItems] = useState<NavSubItem[]>(
     navitems.NavsubItems
@@ -85,12 +83,13 @@ const navitems: NavItem = {
     setNavsubItems(updated);
   };
 
+  //mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
   return (
     <div
-      className={`h-full w-60 flex flex-col fixed z-30 border-r top-16 sm:pl-10 pl-6 sm:px-8 px-4 sm:p-8 p-4 left-0 ${
+      className={`h-full w-60 flex flex-col  fixed z-20 border-r top-16 sm:pl-10 pl-6 sm:px-8 px-4 sm:p-8 p-4 left-0 ${
         mode
-          ? " text-[#444950] font-normal border-r-black/20"
-          : " text-inherit border-r-white/25"
+          ? " text-[#444950] font-normal sm:bg-inherit bg-[#f8f9fa] border-r-black/20"
+          : " text-inherit border-r-white/25 sm:bg-inherit bg-[#242528]"
       } ${value ? "flex" : "hidden"}`}
     >
       <div className="flex flex-col gap-2">
@@ -103,11 +102,14 @@ const navitems: NavItem = {
                 className={({ isActive }) =>
                   `flex flex-row gap-2 items-center transition-colors duration-200 antialiased tracking-wide font-poppins text-sm rounded-sm p-1.5 ${
                     isActive
-                      ? `text-[var(--secondary-color)] font-medium ${
+                      ? `text-[color:var(--secondary-color)] font-medium ${
                           mode ? "" : "bg-[#50505047]"
                         }`
                       : ""
                   }`
+                }
+                style={({ isActive }) =>
+                  isActive ? { color: "var(--secondary-color)" } : {}
                 }
               >
                 <span>{item.icon}</span>
@@ -132,8 +134,13 @@ const navitems: NavItem = {
                         key={subIdx}
                         className={({ isActive }) =>
                           `text-sm text-gray-500 hover:text-[var(--secondary-color)] cursor-pointer ${
-                            isActive ? "text-[var(--secondary-color)]" : ""
+                            isActive
+                              ? "text-[color:var(--secondary-color)]"
+                              : ""
                           }`
+                        }
+                        style={({ isActive }) =>
+                          isActive ? { color: "var(--secondary-color)" } : {}
                         }
                       >
                         {sub.heading}

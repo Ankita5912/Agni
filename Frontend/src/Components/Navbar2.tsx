@@ -9,7 +9,7 @@ import {
   Settings,
   Palette,
   User,
-  ChevronDown
+  ChevronDown,
 } from "lucide-react";
 import Notification from "./Notification";
 import { useSelector, useDispatch } from "react-redux";
@@ -22,6 +22,7 @@ import {
   purpleTheme,
   grayTheme,
 } from "../Redux/Actions/themeActions";
+import { logout } from "../Redux/Actions/authAction";
 import Login from "../Pages/Login";
 import SignUp from "../Pages/SignUp";
 import Button from "./Button";
@@ -35,8 +36,7 @@ export default function Navbar2() {
   const dispatch = useDispatch<AppDispatch>();
 
   const theme = useSelector((state: RootState) => state.theme);
-  // const user = useSelector((state: RootState) => state.auth.user);
-  const user = useState<boolean>(false);
+  const user = useSelector((state: RootState) => state.auth.user);
   const [notification, setNotification] = useState<boolean>(false);
   const [profileOption, setprofileOption] = useState<boolean>(false);
 
@@ -57,7 +57,7 @@ export default function Navbar2() {
     text: string;
     isActive: boolean;
     path: string;
-    onhover :boolean
+    onhover: boolean;
   }
 
   //type of Navitem
@@ -73,16 +73,21 @@ export default function Navbar2() {
     img: TonexaLogo,
     Name: "AGNI",
     NavsubItems: [
-      { text: "About", isActive: false, path: "/", onhover:false, },
-      { text: "Features", isActive: false, path: "/features", onhover:true },
-      { text: "Kanban Board", isActive: false, path: "/kanban", onhover:false },
-      { text: "Projects", isActive: false, path: "/projects", onhover:false },
+      { text: "About", isActive: false, path: "/", onhover: false },
+      { text: "Features", isActive: false, path: "/features", onhover: true },
+      {
+        text: "Kanban Board",
+        isActive: false,
+        path: "/kanban",
+        onhover: false,
+      },
+      { text: "Projects", isActive: false, path: "/projects", onhover: false },
     ],
     profile: "",
   };
 
   //destructuring some keys from object Navitems
-  const {  Name, profile } = navitems;
+  const { Name, profile } = navitems;
 
   const [navsubItems, setNavsubItems] = useState<NavSubItem[]>(
     navitems.NavsubItems
@@ -232,7 +237,7 @@ export default function Navbar2() {
         </div>
 
         {/*profile option*/}
-        {user ? (
+        {user === null ? (
           <>
             <div onClick={() => setShowPage(true)}>
               <Button buttonName="Login" />
@@ -343,6 +348,7 @@ export default function Navbar2() {
                       }}
                     />
                   </div>
+                  <div onClick={() => dispatch(logout())}>Logout</div>
                 </div>
               </div>
             ) : (
@@ -438,6 +444,7 @@ export default function Navbar2() {
                   />
                 </div>
               </div>
+              <div onClick={() => dispatch(logout())}>Logout</div>
             </div>
           </div>
         </>

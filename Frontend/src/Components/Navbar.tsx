@@ -39,8 +39,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   const dispatch = useDispatch<AppDispatch>();
 
   const theme = useSelector((state: RootState) => state.theme);
-  // const user = useSelector((state: RootState) => state.auth.user);
-  const user = useState<boolean>(false);
+  const user = useSelector((state: RootState) => state.auth.user);
   const [notification, setNotification] = useState<boolean>(false);
   const [profileOption, setprofileOption] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -147,7 +146,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         <div className="flex items-center gap-1">
           <LogoA />
         </div>
-        <div>
+        <div className="cursor-pointer">
           <PanelLeft
             size={22}
             strokeWidth={2}
@@ -223,7 +222,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         </div>
 
         {/*profile option*/}
-        {user ? (
+        {user === null ? (
           <>
             <div onClick={() => setShowPage(true)}>
               <Button buttonName="Login" />
@@ -287,8 +286,10 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             />
             {profileOption ? (
               <div
-                className={`fixed right-5 top-16 rounded-md bg-inherit w-fit p-6 flex flex-col gap-2 border  text-inherit ${
-                  mode ? "border-black/20" : "border-white/25"
+                className={`fixed right-5 top-16 rounded-md w-fit p-6 flex flex-col gap-2 border  text-inherit ${
+                  mode
+                    ? "border-black/20 bg-[#f8f9fa]"
+                    : "border-white/25 bg-[#242528]"
                 }`}
               >
                 <div className="flex gap-2 items-center">

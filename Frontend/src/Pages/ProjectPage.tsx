@@ -58,7 +58,7 @@ export default function ProjectPage() {
         Projects
       </h5>
 
-      <h1 className="mb-8 font-extrabold tracking-wide text-2xl">
+      <h1 className="mb-8 font-extrabold tracking-wide font-poppins text-2xl">
         {project?.heading}
       </h1>
 
@@ -72,7 +72,7 @@ export default function ProjectPage() {
             to={items.path}
             key={index}
             className={({ isActive }) =>
-              `font-poppins text-sm font-light p-2 flex flex-row gap-2 items-center ${
+              `font-poppins text-sm font-medium p-2 flex flex-row gap-2 items-center ${
                 isActive
                   ? "border-b-4 text-[var(--secondary-color)] items-center border-[var(--secondary-color)]"
                   : ""
