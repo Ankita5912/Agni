@@ -1,6 +1,6 @@
 export default function LogoA() {
   return (
-    <div className="flex items-center justify-center bg-[#f8f9fa]">
+    <div className="flex items-center justify-center">
       <svg
         width="40"
         height="60"

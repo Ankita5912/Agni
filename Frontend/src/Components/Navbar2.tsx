@@ -172,12 +172,12 @@ export default function Navbar2() {
               className={({ isActive }) =>
                 `transition-colors duration-200 antialiased tracking-wide font-poppins text-md flex flex-row items-center gap-2 ${
                   isActive
-                    ? "text-[color:var(--primary-color)] font-semibold"
+                    ? "text-[color:var(--secondary-color)] font-semibold"
                     : ""
                 }`
               }
               style={({ isActive }) =>
-                isActive ? { color: "var(--primary-color)" } : {}
+                isActive ? { color: "var(--secondary-color)" } : {}
               }
             >
               {item.text}
@@ -212,9 +212,9 @@ export default function Navbar2() {
       >
         <div onClick={handleToggle} className="lg:flex hidden">
           {mode ? (
-            <Moon strokeWidth={2} size={20} className="" />
+            <Moon strokeWidth={2} size={20} className="" stroke="#444950" />
           ) : (
-            <Sun size={20} strokeWidth={2} />
+            <Sun size={20} strokeWidth={2} stroke="#444950" />
           )}
         </div>
 
@@ -227,7 +227,7 @@ export default function Navbar2() {
             setNotification(false);
           }}
         >
-          <Bell strokeWidth={2} size={20} />
+          <Bell strokeWidth={2} size={20} stroke="#444950" />
           {notification ? <Notification /> : <></>}
         </div>
 

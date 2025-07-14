@@ -1,5 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 
+export type SubtaskType = {
+  number: number;
+  heading: string;
+  startDate: Date;
+  lastDate: Date;
+  assignee: string;
+  status: "To Do" | "In Progress" | "Completed" | "Review";
+};
+
 export type ProjectType = {
   uuid: string;
   heading: string;
@@ -8,7 +17,8 @@ export type ProjectType = {
   startDate: Date;
   deadline: Date;
   team: string;
-};
+  subtask?: SubtaskType[];
+}
 
 const Project: ProjectType[] = [
   {

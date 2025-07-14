@@ -1,9 +1,20 @@
-import Project from "../Data/Projects";
 import ProjectCard from "../Components/ProjectCard";
 import StatusPieChart from "../Components/PieChart";
+import LineChart from "../Components/LineChart";
+import { useSelector } from "react-redux";
+import type { RootState } from "../Redux/Reducers/rootReducer";
 
 export default function ProjectDashboard() {
-  
+  const Project = useSelector((state: RootState) => state.Project.projects);
+
+  const ProStartEnd = () => {
+    return Project.map(({ heading, startDate, deadline }) => ({
+      heading,
+      startDate,
+      deadline,
+    }));
+  };
+
   const StatusCounts = () => {
     const statusCounts = {
       todo: 0,
@@ -26,8 +37,6 @@ export default function ProjectDashboard() {
         case "Completed":
           statusCounts.completed++;
           break;
-        default:
-          break;
       }
     }
 
@@ -36,38 +45,50 @@ export default function ProjectDashboard() {
       { name: "In Progress", value: statusCounts.inProgress },
       { name: "Review", value: statusCounts.review },
       { name: "Completed", value: statusCounts.completed },
-    ];;
+    ];
   };
 
   const projectStatusData = StatusCounts();
-  
 
   return (
-    <div className="">
-      <h1 className="font-roboto mb-4 text-xl border-b pb-4">All Projects</h1>
-      <div
-        className="flex flex-row overflow-scroll gap-5 mb-5 p-5 mt-8 md:justify-start justify-center"
-        style={{ scrollbarWidth: "none", scrollBehavior: "smooth" }}
-      >
-        {Project.map((item) => (
-          <ProjectCard
-            key={item.uuid}
-            heading={item.heading}
-            description={item.description}
-            status={item.status}
-            startDate={item.startDate}
-            deadline={item.deadline}
-            team={item.team}
-          />
-        ))}
+    <div className="w-full px-4 sm:px-6 lg:px-8">
+      <h1 className="font-roboto mb-4 text-xl border-b border-white/25 pb-3">
+        All Projects
+      </h1>
+
+      <div className="flex overflow-x-auto gap-5 mb-6 py-3 scrollbar-hide">
+        {Project.length > 0 ? (
+          Project.map((item) => (
+            <ProjectCard
+              key={item.uuid}
+              heading={item.heading}
+              description={item.description}
+              status={item.status}
+              startDate={item.startDate}
+              deadline={item.deadline}
+              team={item.team}
+            />
+          ))
+        ) : (
+          <div className="text-2xl font-bold w-full">
+            No project exists. Create some to continue.
+          </div>
+        )}
       </div>
-      <h1 className="font-roboto mb-3 text-xl">Analysis</h1>
-      <div className="h-40 w-96 mb-40">
-        <StatusPieChart data={projectStatusData} />
-      </div>
-      <div>
-        
-      </div>
+
+      <h1 className="font-roboto mb-4 text-xl">Analysis</h1>
+
+      {Project.length > 0 && (
+        <div className="flex flex-col lg:flex-row gap-10 w-full items-start overflow-x-auto">
+          <div className="w-full lg:w-1/3 min-w-[280px]">
+            <StatusPieChart data={projectStatusData} />
+          </div>
+
+          <div className="w-full lg:w-2/3 min-w-[320px]">
+            <LineChart data={ProStartEnd()} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

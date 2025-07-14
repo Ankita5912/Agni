@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 // import { Link } from "react-router-dom";
-import TonexaLogo from "../assets/TonexaLogo.png";
+import LogoA from "./Logo";
 import {
   Moon,
   Sun,
@@ -64,7 +64,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
   //type of Navitem
   interface NavItem {
-    img: string;
     Name: string;
     NavsubItems: NavSubItem[];
     profile: string;
@@ -72,7 +71,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
   //Object containing navitem
   const navitems: NavItem = {
-    img: TonexaLogo,
     Name: "AGNI",
     NavsubItems: [
       { text: "About", isActive: false, path: "/about" },
@@ -84,7 +82,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   };
 
   //destructuring some keys from object Navitems
-  const { img, Name, profile } = navitems;
+  const { profile } = navitems;
 
   const [showLoginPage, setShowPage] = useState<boolean>(false);
 
@@ -147,13 +145,15 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     >
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1">
-          <img src={img} alt="Logo" className="sm:h-8 h-6" />
-          <h1 className="sm:text-3xl text-xl font-extrabold font-Tektur tracking-widest">
-            {Name}
-          </h1>
+          <LogoA />
         </div>
         <div>
-          <PanelLeft size={18} onClick={toggleSidebar} />
+          <PanelLeft
+            size={22}
+            strokeWidth={2}
+            stroke="#444950"
+            onClick={toggleSidebar}
+          />
         </div>
       </div>
 
@@ -179,7 +179,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       <div className="flex flex-row gap-4">
         <div
           className={`xl:w-md sm:w-xs w-32 py-1 px-2.5 pl-3 rounded-sm sm:h-9 h-6 flex  items-center ${
-            mode ? "bg-[#eeeeeec9]" : "bg-[#282828ba]"
+            mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
           }`}
         >
           <input
@@ -203,9 +203,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       >
         <div onClick={handleToggle} className="lg:flex hidden">
           {mode ? (
-            <Moon strokeWidth={2} size={20} className="" />
+            <Moon strokeWidth={2} size={20} className="" stroke="#444950" />
           ) : (
-            <Sun size={20} strokeWidth={2} />
+            <Sun size={20} strokeWidth={2} stroke="#444950" />
           )}
         </div>
 
@@ -218,7 +218,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             setNotification(false);
           }}
         >
-          <Bell strokeWidth={2} size={20} />
+          <Bell strokeWidth={2} size={20} stroke="#444950" />
           {notification ? <Notification /> : <></>}
         </div>
 

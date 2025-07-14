@@ -1,14 +1,17 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import { useNavigate } from "react-router-dom";
+import { createProject } from "../Redux/Actions/projectAction";
+import { v4 as uuidv4 } from 'uuid';
+import type { AppDispatch } from "../Redux/store";
 
 const schema = z.object({
   Heading: z.string().min(4, "Heading must be at least 4 characters"),
   Description: z.string().max(100, "Description must be under 100 characters"),
-  status: z.enum(["todo", "inprogress", "completed"], {
+  status: z.enum(["To Do", "In Progress", "Review", "Completed"], {
     required_error: "Please select a status",
   }),
   startDate: z.string().nonempty("Start date is required"),
@@ -19,6 +22,7 @@ type FormType = z.infer<typeof schema>;
 
 export default function CreProjectForm() {
   const mode = useSelector((state: RootState) => state.mode.mode);
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
@@ -31,8 +35,19 @@ export default function CreProjectForm() {
   const navigate = useNavigate()
 
   const onSubmit = (data: FormType) => {
-    console.log("Project Created:", data);
-    navigate("/kanban-board");
+
+    const newProject = {
+      uuid: uuidv4(),
+      heading: data.Heading,
+      description: data.Description,
+      status: data.status,
+      startDate: new Date(data.startDate),
+      deadline: new Date(data.deadline),
+      team: "Default Team",
+      subtask: [],
+    };
+    dispatch(createProject(newProject));
+    navigate("/kanban");
   };
 
   return (
@@ -132,9 +147,9 @@ export default function CreProjectForm() {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
             <option value="">Select status</option>
-            <option value="todo">To Do</option>
-            <option value="inprogress">In Progress</option>
-            <option value="completed">Completed</option>
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
           </select>
           {errors.status && (
             <p className="text-red-500 text-xs mt-1">{errors.status.message}</p>

@@ -7,7 +7,7 @@ export type cardProptype = {
   status: "To Do" | "In Progress" | "Completed" | "On Hold" | "Review";
   startDate: Date;
   deadline: Date;
-  team: string;
+  team?: string;
 };
 
 export default function ProjectCard({
@@ -22,10 +22,9 @@ export default function ProjectCard({
 
   return (
     <div
-      className={`relative w-full md:min-w-2xs  p-4 rounded shadow-md border overflow-hidden hover:shadow-2xl  ${
-        mode ? "bg-white border-black/10" : "bg-[#282828] border-black/75"
-        }`}
-      
+      className={`relative w-full md:min-w-2xs max-w-2xs p-4 rounded shadow-md border overflow-hidden hover:shadow-2xl  ${
+        mode ? "bg-white border-black/10" : "bg-[#242528] border-black/30"
+      }`}
     >
       {/* SVG Decorative Blob */}
       <div className="absolute -top-12 -left-15 w-40 h-40 z-0 opacity-10 pointer-events-none">

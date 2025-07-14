@@ -13,8 +13,8 @@ export interface ThemePayload {
 }
 
 const initialState: ThemePayload = {
-  primaryColor: "#F46B45",
-  secondaryColor: "#EEA849",
+  primaryColor: "#1868db",
+  secondaryColor: "#2684FF",
   textColor: "#000000",
 };
 

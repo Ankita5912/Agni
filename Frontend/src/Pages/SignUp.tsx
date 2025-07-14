@@ -51,7 +51,7 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
 
   return (
     <div
-      className={`bg-inherit p-10 rounded shadow-md w-sm flex flex-col gap-4 z-50 relative font-roboto tracking-wide font-light ${
+      className={`p-10 rounded shadow-md w-sm flex flex-col gap-4 z-50 relative font-roboto tracking-wide font-light ${
         mode ? "bg-white" : "bg-[#1e1e1e]"
       }`}
     >

@@ -9,67 +9,76 @@ import {
   YAxis,
 } from "recharts";
 
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+interface ProjectData {
+  heading: string;
+  startDate: Date;
+  deadline: Date;
+}
 
-export default function Example({data}) {
+interface Props {
+  data: ProjectData[];
+}
+
+export default function LineChart2({ data }: Props) {
+  const today = new Date();
+
+  const chartData = data.map((project) => {
+    const start = new Date(project.startDate);
+    const end = new Date(project.deadline);
+
+    const daysToStart = Math.round(
+      (start.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    const daysToEnd = Math.round(
+      (end.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    const durationInDays = Math.round(
+      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    return {
+      name: project.heading,
+      daysToStart,
+      daysToEnd,
+      durationInDays,
+    };
+  });
+
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart width={500} height={300} data={data}>
+    <ResponsiveContainer width="90%" height={400}>
+      <LineChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
-        <YAxis />
-        <Tooltip />
+        <XAxis dataKey="name" />
+        <YAxis label={{ value: "Days", angle: -90, position: "insideLeft" }} />
+        <Tooltip
+          formatter={(value: number, name: string) => {
+            if (name === "durationInDays") return [`${value} days`, "Duration"];
+            if (name === "daysToStart")
+              return [`${value} days`, "Days to Start"];
+            if (name === "daysToEnd")
+              return [`${value} days`, "Days to Deadline"];
+            return [value, name];
+          }}
+        />
         <Legend />
         <Line
           type="monotone"
-          dataKey="pv"
+          dataKey="daysToStart"
           stroke="#8884d8"
-          activeDot={{ r: 8 }}
+          name="Days to Start"
         />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        <Line
+          type="monotone"
+          dataKey="daysToEnd"
+          stroke="#82ca9d"
+          name="Days to Deadline"
+        />
+        <Line
+          type="monotone"
+          dataKey="durationInDays"
+          stroke="#ffc658"
+          name="Duration (Days)"
+        />
       </LineChart>
     </ResponsiveContainer>
   );

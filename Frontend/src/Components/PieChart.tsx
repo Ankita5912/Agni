@@ -19,7 +19,7 @@ interface StatusPieChartProps {
 }
 
 // Color palette
-const COLORS = ["#4ade80", "#60a5fa", "#fbbf24", "#f87171", "#a78bfa"];
+const COLORS = ["#146331ff", "#3e82d4ff", "#daa215ff", "#c90f0fff", "#a78bfa"];
 
 const StatusPieChart: React.FC<StatusPieChartProps> = ({ data }) => {
   return (
@@ -32,7 +32,7 @@ const StatusPieChart: React.FC<StatusPieChartProps> = ({ data }) => {
             nameKey="name"
             outerRadius={100}
             innerRadius={60}
-            fill="#8884d8"
+            // fill="#8884d8"
             label
           >
             {data.map((entry, index) => (
