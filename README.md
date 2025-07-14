@@ -40,8 +40,8 @@ A full-featured, responsive Kanban application designed to streamline task manag
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/kanban-app.git
-cd kanban-app
+git clone https://github.com/Ankita5912/Agni
+cd Frontend
 npm install
 npm run dev
 
