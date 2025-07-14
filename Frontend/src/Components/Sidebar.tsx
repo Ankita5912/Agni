@@ -65,12 +65,7 @@ const navitems: NavItem = {
       isActive: false,
       path: "/teams",
       pathExists: false,
-      subitems: Array.from(new Set(Project.map((proj) => proj.team))).map(
-        (team) => ({
-          heading: team,
-          path: `/teams/${team.replace(/\s+/g, "-").toLowerCase()}`,
-        })
-      ),
+      subitems: [],
       icon: <Users size={16} />,
     },
   ],
