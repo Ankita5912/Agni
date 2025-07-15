@@ -27,7 +27,7 @@ export default function HomePage() {
           <div className="absolute -mt-40 ml-115 z-1">
             <img src="/just.png" className="h-50" />
           </div>
-          <div className="absolute -mt-30 ml-116 h-fit w-fit rotate-26">
+          <div className="absolute -mt-30 ml-118 h-fit w-fit rotate-26">
             <img src="/arrow.png" className="h-62"></img>
           </div>
           <div onClick={() => navigate("/create-project")}>
