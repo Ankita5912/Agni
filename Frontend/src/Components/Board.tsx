@@ -64,24 +64,30 @@ export default function Board() {
     <div className="flex md:flex-row md:overflow-auto gap-4 flex-col">
       {boardtype.map((board, index) => (
         <div
-        className="sm:w-xs w-72 h-96 border bg-border rounded-md p-2 pt-1"
+          className=" w-72 min-h-40 max-h-96 border bg-border rounded-md "
           onClick={() => setinputfield(true)}
           key={index}
-      >
-          <div className="g-[#f8f9fa] font-roboto tracking-wide mb-2">{board.name}</div>
-          <div className="flex flex-col gap-1">{board.subtask.map((subtask, index) => (
-            <div className="bg-[#f8f9fa] rounded-sm w-full p-1 " key={index}>{subtask.heading}</div>
-          ))}</div>
-        {showInputfield && (
-          <input
-            type="text"
-            required
-            name="subtask"
-            placeholder="Enter your task"
-            className="bg-[#f8f9fa] rounded-sm w-full p-1 outline-1 outline-blue-400"
-          />
-        )}
-      </div>
+        >
+          <div className="g-[#f8f9fa] font-roboto tracking-wide text-xs uppercase w-full mb-4 p-2 bg-amber-700 rounded-t-md">
+            {board.name}
+          </div>
+          <div className="flex flex-col gap-1 px-3">
+            {board.subtask.map((subtask, index) => (
+              <div className="bg-[#f8f9fa] rounded-sm w-full p-1 " key={index}>
+                {subtask.heading}
+              </div>
+            ))}
+          </div>
+          {showInputfield && (
+            <input
+              type="text"
+              required
+              name="subtask"
+              placeholder="Enter your task"
+              className="bg-[#f8f9fa] rounded-sm w-full p-1 outline-1 outline-blue-400"
+            />
+          )}
+        </div>
       ))}
       <div className="text-md" onClick={() => setBoardinput(true)}>
         {showBoardinput ? (

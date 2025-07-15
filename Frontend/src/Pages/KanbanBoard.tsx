@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/Sidebar";
+import Loader from "../Components/Loader";
 
 export default function KanbanBoard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [spinner, setspinner] = useState<boolean>(true);
+  
+  useEffect(() => {
+    setTimeout(() => setspinner(false), 2000);
+  }, [])
+
+
+  if (spinner) {
+    return <Loader />;
+  }
+
 
   return (
     <div className="w-screen h-screen overflow-hidden flex flex-col">
@@ -26,7 +38,7 @@ export default function KanbanBoard() {
         </div>
 
         {/* Main content area — scrollable only */}
-        <div className="h-[calc(100vh-4rem)] overflow-auto w-full p-4">
+        <div className="h-[calc(100vh-4rem)] overflow-auto w-full ">
           <Outlet />
         </div>
       </div>

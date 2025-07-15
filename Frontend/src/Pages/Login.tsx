@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 //Define prop types
 interface LoginProps {
@@ -17,8 +18,13 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
   // Schema validation using Zod
   const schema = z.object({
     email: z.string().email("Invalid email format"),
-    password: z.string().min(8, "Password must be at least 8 characters").max(32),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(32),
   });
+
+  const navigate = useNavigate();
 
   type SchemaType = z.infer<typeof schema>;
 
@@ -32,18 +38,18 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
   });
 
   //Form submission handler
-  const submit = async(data: SchemaType) => {
+  const submit = async (data: SchemaType) => {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       alert("logges in succesfully"); // clear error if success
+      navigate("/kanban");
     } catch (error) {
-       if (error instanceof FirebaseError) {
-              alert(error.message);
-            } else {
-              alert("An unexpected error occurred.");
-            }
+      if (error instanceof FirebaseError) {
+        alert(error.message);
+      } else {
+        alert("An unexpected error occurred.");
+      }
     }
-    console.log(data)
   };
 
   const mode = useSelector((state: RootState) => state.mode.mode);

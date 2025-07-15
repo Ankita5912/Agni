@@ -10,6 +10,7 @@ import {
   Settings,
   Palette,
   User,
+  LogOut,
   PanelLeft,
 } from "lucide-react";
 import Notification from "./Notification";
@@ -17,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { darkMode, lightMode } from "../Redux/Actions/modeActions";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import type { AppDispatch } from "../Redux/store";
+import { logout } from "../Redux/Actions/authAction";
 import {
   blueTheme,
   orangeTheme,
@@ -143,7 +145,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     }`}
     >
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 " onClick={() => navigate("/")}>
           <LogoA />
         </div>
         <div className="cursor-pointer">
@@ -200,7 +202,15 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         className="lg:flex items-center xl:gap-8 sm hidden
       :gap-6 gap-4"
       >
-        <div onClick={handleToggle} className="lg:flex hidden">
+        <div
+          onClick={handleToggle}
+          className={`lg:flex h-8 w-8 rounded-sm hidden cursor-pointer transition-all duration-300
+            ${
+              mode
+                ? "bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"
+                : "bg-inherit border border-gray-300"
+            }`}
+        >
           {mode ? (
             <Moon strokeWidth={2} size={20} className="" stroke="#444950" />
           ) : (
@@ -335,6 +345,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                       }}
                     />
                   </div>
+                  <div
+                    className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
+                    onClick={() => dispatch(logout())}
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </div>
                 </div>
               </div>
             ) : (
@@ -429,6 +446,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                     onClick={() => handleTheme("gray")}
                   />
                 </div>
+              </div>
+              <div
+                className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
+                onClick={() => dispatch(logout())}
+              >
+                <LogOut size={16} />
+                Logout
               </div>
             </div>
           </div>

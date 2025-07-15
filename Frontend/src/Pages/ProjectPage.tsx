@@ -49,16 +49,16 @@ export default function ProjectPage() {
   }, [projectId]);
 
   return (
-    <div className={``}>
+    <div className={`pt-4 pr-4`}>
       <h5
-        className={`font-roboto mb-1.5 text-[#555b63] ${
+        className={`font-roboto mb-2 text-[#555b63] ${
           mode ? "font-medium text-2sm " : " text-md  font-extralight"
         }`}
       >
         Projects
       </h5>
 
-      <h1 className="mb-8 font-extrabold tracking-wide font-poppins text-2xl">
+      <h1 className="mb-3 font-extrabold tracking-wide font-poppins text-2xl">
         {project?.heading}
       </h1>
 

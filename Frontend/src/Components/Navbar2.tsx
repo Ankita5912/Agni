@@ -9,6 +9,7 @@ import {
   Settings,
   Palette,
   User,
+  LogOut,
   ChevronDown,
 } from "lucide-react";
 import Notification from "./Notification";
@@ -348,7 +349,13 @@ export default function Navbar2() {
                       }}
                     />
                   </div>
-                  <div onClick={() => dispatch(logout())}>Logout</div>
+                  <div
+                    className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
+                    onClick={() => dispatch(logout())}
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </div>
                 </div>
               </div>
             ) : (
@@ -444,7 +451,13 @@ export default function Navbar2() {
                   />
                 </div>
               </div>
-              <div onClick={() => dispatch(logout())}>Logout</div>
+              <div
+                className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
+                onClick={() => dispatch(logout())}
+              >
+                <LogOut size={16} />
+                Logout
+              </div>
             </div>
           </div>
         </>

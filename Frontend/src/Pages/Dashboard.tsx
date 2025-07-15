@@ -51,7 +51,7 @@ export default function ProjectDashboard() {
   const projectStatusData = StatusCounts();
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8">
+    <div className="w-full pt-4">
       <h1
         className={`font-roboto mb-4 text-xl border-b  pb-3 ${
           mode ? "border-black/20" : "border-white/25"

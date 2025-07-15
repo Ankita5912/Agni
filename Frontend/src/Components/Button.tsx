@@ -5,11 +5,11 @@ interface buttonPropType{
   buttonName :string
 }
 
-export default function Button({ buttonName }: buttonPropType) {
+export default function Button({ buttonName, }: buttonPropType) {
   const mode = useSelector((state: RootState) => state.mode.mode)
   return (
     <button
-      className={` font-normal font-roboto bg-blend-color-burn h-8 w-20 cursor-pointer rounded-sm  ${
+      className={` font-normal font-roboto bg-blend-color-burn min-h-8 min-w-10 max-w-fit py-1 px-3 cursor-pointer rounded-sm  ${
         mode
           ? "bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white"
           : "bg-[#f8f9fa] text-black/90  "
