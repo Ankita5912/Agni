@@ -204,7 +204,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       >
         <div
           onClick={handleToggle}
-          className={`lg:flex h-8 w-8 rounded-sm hidden cursor-pointer transition-all duration-300
+          className={`lg:flex h-8 w-8 items-center justify-center rounded-sm hidden cursor-pointer transition-all duration-300
             ${
               mode
                 ? "bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"
@@ -212,9 +212,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             }`}
         >
           {mode ? (
-            <Moon strokeWidth={2} size={20} className="" stroke="#444950" />
+            <Moon strokeWidth={2} size={20} className="" stroke="#c3c7cdff" />
           ) : (
-            <Sun size={20} strokeWidth={2} stroke="#444950" />
+            <Sun size={20} strokeWidth={2} stroke="#c3c7cdff" />
           )}
         </div>
 
