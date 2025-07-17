@@ -9,10 +9,10 @@ export default function HomePage() {
   return (
     <div className="relative overflow-hidden">
       <Navbar2 />
-      <main className="flex flex-col w-full items-center justify-center">
+      <main className="flex flex-col w-full items-center justify-center px-3">
         <div className="max-w-4xl w-full text-center mt-32">
           <h1
-            className={`text-6xl/tight font-extrabold font-josphin mb-6 ${
+            className={`sm:text-6xl/tight text-3xl sm:font-extrabold font-bold font-josphin mb-6 ${
               mode ? "text-black" : "text-white"
             }`}
           >
@@ -20,7 +20,7 @@ export default function HomePage() {
               Welcome to your Kanban Board
             </span>{" "}
             Flow with{" "}
-            <span className="font-extrabold font-poppins text-[#0052CC]">
+            <span className="font-extrabold font-poppins text-[var(--primary-color)]">
               Agni
             </span>
           </h1>
@@ -32,16 +32,16 @@ export default function HomePage() {
           </div>
           <div onClick={() => navigate("/create-project")}>
             <button
-              className={` font-semibold tracking-wide  font-Manrope bg-blend-color-burn h-12  max-w-fit py-1 px-5 cursor-pointer rounded-full  ${
-                mode
-                  ? "bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white"
-                  : "bg-[#f8f9fa] text-black/90  "
-              }`}
+              className={`sm:text-base text-xs sm:font-semibold font-normal tracking-wide  font-Manrope bg-blend-color-burn sm:h-12 h-10  max-w-fit py-1 sm:px-5 px-4 cursor-pointer rounded-full bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white`}
             >
               Create New Project
             </button>
           </div>
-          <h1 className="text-md font-bold font-Manrope text-[#444950] mt-6">
+          <h1
+            className={`sm:text-base text-sm sm:font-bold font-semibold font-Manrope  mt-6 ${
+              mode ? "text-[#444950]" : "text-inherit"
+            }`}
+          >
             Manage Your Projects the Agile Way — Seamlessly
           </h1>
           {/* <p className="text-lg md:text-xl leading-relaxed text-gray-600">

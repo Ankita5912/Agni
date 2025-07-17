@@ -62,7 +62,10 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
           <label className="block text-sm">Name</label>
           <input
             type="text"
-            className="w-full p-1.5 border rounded mt-1 text-sm"
+            className={`w-full p-1.5 border rounded mt-1 placeholder:text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
+            placeholder="Full Name"
             {...register("name")}
           />
           {errors.name && (
@@ -74,7 +77,10 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
           <label className="block text-sm ">Email</label>
           <input
             type="email"
-            className="w-full p-1.5 border rounded mt-1"
+            className={`w-full p-1.5 border rounded mt-1 placeholder:text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
+            placeholder="Email"
             {...register("email")}
           />
           {errors.email && (
@@ -86,8 +92,11 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
           <label className="block text-sm">Phone No</label>
           <input
             type="text"
-            className="w-full p-1.5 border rounded mt-1"
+            className={`w-full p-1.5 border rounded mt-1 placeholder:text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
             {...register("phoneNo")}
+            placeholder="Phone No"
           />
           {errors.phoneNo && (
             <p className="text-red-500 text-sm">{errors.phoneNo.message}</p>
@@ -98,8 +107,11 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
           <label className="block text-sm">Password</label>
           <input
             type="password"
-            className="w-full p-1.5 border rounded mt-1"
+            className={`w-full p-1.5 border rounded mt-1 placeholder:text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
             {...register("password")}
+            placeholder="Password"
           />
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -110,8 +122,11 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
           <label className="block text-sm ">Confirm Password</label>
           <input
             type="password"
-            className="w-full p-1.5 border rounded mt-1"
+            className={`w-full p-1.5 border rounded mt-1 placeholder:text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
             {...register("confirmPassword")}
+            placeholder="Confirm Password"
           />
           {errors.confirmPassword && (
             <p className="text-red-500 text-sm">
@@ -122,7 +137,7 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white py-2 rounded hover:bg-blue-600"
         >
           Sign Up
         </button>

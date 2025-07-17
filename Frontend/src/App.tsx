@@ -11,7 +11,7 @@ import Board from "./Components/Board";
 import List from "./Components/List";
 import { Navigate } from "react-router-dom";
 import { FirebaseListener } from "../FirebaseListener";
-
+import { Toaster } from "react-hot-toast";
 function App() {
   const mode = useSelector((state: RootState) => state.mode.mode);
 
@@ -48,6 +48,7 @@ function App() {
             </Route>
           </Routes>
         </div>
+        <Toaster position="top-right" />
       </FirebaseListener>
     </BrowserRouter>
   );

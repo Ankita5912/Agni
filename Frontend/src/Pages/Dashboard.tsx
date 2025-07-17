@@ -6,7 +6,7 @@ import type { RootState } from "../Redux/Reducers/rootReducer";
 
 export default function ProjectDashboard() {
   const Project = useSelector((state: RootState) => state.Project.projects);
-  const mode = useSelector((state:RootState)=> state.mode.mode)
+  const mode = useSelector((state: RootState) => state.mode.mode);
   const ProStartEnd = () => {
     return Project.map(({ heading, startDate, deadline }) => ({
       heading,
@@ -53,14 +53,14 @@ export default function ProjectDashboard() {
   return (
     <div className="w-full pt-4">
       <h1
-        className={`font-roboto mb-4 text-xl border-b  pb-3 ${
+        className={`font-roboto mb-4 text-xl border-b  pb-3 px-3 ${
           mode ? "border-black/20" : "border-white/25"
         }`}
       >
         All Projects
       </h1>
 
-      <div className="flex overflow-x-auto gap-5 mb-6 py-3 scrollbar-hide">
+      <div className="flex overflow-x-auto gap-5 mb-6 py-3 scrollbar-hide px-3">
         {Project.length > 0 ? (
           Project.map((item) => (
             <ProjectCard
@@ -80,15 +80,27 @@ export default function ProjectDashboard() {
         )}
       </div>
 
-      <h1 className="font-roboto mb-4 text-xl">Analysis</h1>
+      <h1 className="font-roboto mb-1 text-xl px-3">Analysis</h1>
 
       {Project.length > 0 && (
-        <div className="flex flex-col lg:flex-row gap-10 w-full items-start overflow-x-auto">
-          <div className="w-full lg:w-1/3 min-w-[280px]">
+        <div className="flex flex-col lg:flex-row gap-5 w-full items-start overflow-x-auto">
+          <div
+            className={`w-full lg:w-1/3 min-w-[280px] pb-5 rounded-sm shadow-xl m-2 ml-3 border ${
+              mode
+                ? "bg-white/70 border-gray-200"
+                : "bg-[#1a1b1e]/60 border-none"
+            }`}
+          >
             <StatusPieChart data={projectStatusData} />
           </div>
 
-          <div className="w-full lg:w-2/3 min-w-[320px]">
+          <div
+            className={`w-full lg:w-2/3 min-w-[320px] border m-4 mt-2 p-2 py-4 shadow-xl rounded-sm ${
+              mode
+                ? "bg-white/70 border-gray-200"
+                : "bg-[#1a1b1e]/60 border-none"
+            }`}
+          >
             <LineChart data={ProStartEnd()} />
           </div>
         </div>

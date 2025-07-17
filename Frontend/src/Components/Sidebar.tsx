@@ -86,7 +86,7 @@ export default function Sidebar({ value }: SidebarProp) {
   //mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
   return (
     <div
-      className={`h-full w-60 flex flex-col  fixed z-20 border-r top-16 sm:pl-10 pl-6 sm:px-8 px-4 sm:p-8 p-4 left-0 ${
+      className={`h-full w-64 flex flex-col  fixed z-20 border-r top-14 sm:pl-10 pl-6 sm:px-8 px-4 sm:p-8 p-4 left-0 ${
         mode
           ? " text-[#444950] font-normal sm:bg-inherit bg-[#f8f9fa] border-r-black/20"
           : " text-inherit border-r-white/25 sm:bg-inherit bg-[#242528]"
@@ -118,7 +118,7 @@ export default function Sidebar({ value }: SidebarProp) {
             ) : (
               <>
                 <div
-                  className={`flex flex-row gap-2 items-center cursor-pointer transition-colors duration-200 antialiased tracking-wide font-poppins text-sm rounded-sm p-1.5 ${
+                  className={`flex flex-row gap-2 items-center cursor-pointer transition-colors duration-300 antialiased tracking-wide font-poppins text-sm rounded-sm p-1.5 ${
                     mode ? "" : ""
                   }`}
                   onClick={() => toggleSubitems(index)}
@@ -133,7 +133,7 @@ export default function Sidebar({ value }: SidebarProp) {
                         to={sub.path}
                         key={subIdx}
                         className={({ isActive }) =>
-                          `text-sm text-gray-500 hover:text-[var(--secondary-color)] cursor-pointer ${
+                          `text-sm text-inherit/10 hover:text-[var(--secondary-color)] cursor-pointer ${
                             isActive
                               ? "text-[color:var(--secondary-color)]"
                               : ""

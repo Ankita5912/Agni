@@ -6,13 +6,16 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+ import { toast } from "react-hot-toast";
 
 //Define prop types
 interface LoginProps {
   loginPage: (state: boolean) => void;
   signUpPage: (state: boolean) => void;
 }
+
+
 
 export default function Login({ loginPage, signUpPage }: LoginProps) {
   // Schema validation using Zod
@@ -24,7 +27,8 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
       .max(32),
   });
 
-  const navigate = useNavigate();
+
+  const user = useSelector((state : RootState) => state.auth.user)
 
   type SchemaType = z.infer<typeof schema>;
 
@@ -41,8 +45,6 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
   const submit = async (data: SchemaType) => {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
-      alert("logges in succesfully"); // clear error if success
-      navigate("/kanban");
     } catch (error) {
       if (error instanceof FirebaseError) {
         alert(error.message);
@@ -51,6 +53,12 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
       }
     }
   };
+
+  useEffect(() => {
+    if (user !== null) {
+      toast.success("User login successfully")
+    }
+  }, [user])
 
   const mode = useSelector((state: RootState) => state.mode.mode);
 
@@ -71,7 +79,9 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
           <input
             type="email"
             id="email"
-            className="w-full p-2 border rounded mt-1"
+            className={`w-full p-2 border rounded mt-1 focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
             placeholder="Email"
             {...register("email")}
           />
@@ -88,7 +98,9 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
           <input
             type="password"
             id="password"
-            className="w-full p-2 border rounded mt-1"
+            className={`w-full p-2 border rounded mt-1 focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
             placeholder="Password"
             {...register("password")}
           />
@@ -100,7 +112,7 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
         {/* Submit Button */}
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white py-2 rounded hover:bg-blue-600"
         >
           Login
         </button>

@@ -60,24 +60,30 @@ export default function LineChart2({ data }: Props) {
             return [value, name];
           }}
         />
-        <Legend />
+        <div className="my-2">
+          <Legend layout="horizontal" verticalAlign="top" />
+        </div>
+
         <Line
           type="monotone"
           dataKey="daysToStart"
           stroke="#8884d8"
           name="Days to Start"
+          dot={{ r: 4 }}
         />
         <Line
           type="monotone"
           dataKey="daysToEnd"
           stroke="#82ca9d"
           name="Days to Deadline"
+          dot={{ r: 4 }}
         />
         <Line
           type="monotone"
           dataKey="durationInDays"
           stroke="#ffc658"
           name="Duration (Days)"
+          dot={{ r: 4 }}
         />
       </LineChart>
     </ResponsiveContainer>

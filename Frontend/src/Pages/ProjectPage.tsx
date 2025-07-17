@@ -51,14 +51,14 @@ export default function ProjectPage() {
   return (
     <div className={`pt-4 pr-4`}>
       <h5
-        className={`font-roboto mb-2 text-[#555b63] ${
+        className={`font-roboto mb-2 text-[#555b63] px-2 ${
           mode ? "font-medium text-2sm " : " text-md  font-extralight"
         }`}
       >
         Projects
       </h5>
 
-      <h1 className="mb-3 font-extrabold tracking-wide font-poppins text-2xl">
+      <h1 className="mb-3 font-extrabold tracking-wide font-poppins text-2xl px-2">
         {project?.heading}
       </h1>
 
@@ -72,10 +72,12 @@ export default function ProjectPage() {
             to={items.path}
             key={index}
             className={({ isActive }) =>
-              `font-poppins text-sm font-medium p-2 flex flex-row gap-2 items-center ${
+              `font-roboto p-2 flex flex-row gap-2 items-center tracking-wide text-[#555b63] ${
+                mode ? "font-medium text-2sm " : "text-md  font-extralight"
+              } ${
                 isActive
                   ? "border-b-4 text-[var(--secondary-color)] items-center border-[var(--secondary-color)]"
-                  : ""
+                  : ` ${mode ? "" : " "}`
               }`
             }
           >

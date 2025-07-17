@@ -29,6 +29,8 @@ import Login from "../Pages/Login";
 import SignUp from "../Pages/SignUp";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 type NavbarProps = {
   toggleSidebar: () => void;
@@ -136,16 +138,17 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   }, [theme]);
 
   const [MobileMenu, setMobileMenu] = useState<boolean>(false);
+  const color = mode ? '#444950' : 'white';
 
   return (
     <div
-      className={`flex justify-between items-center h-16 md
+      className={`flex justify-between items-center h-14 md
     sm:px-6 px-2 fixed top-0 w-full py-3 z-50 border-b  ${
       mode ? "border-black/20" : "border-white/25"
     }`}
     >
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1 " onClick={() => navigate("/")}>
+      <div className="flex items-center sm:gap-4 gap-1">
+        <div className="flex items-center gap-1" onClick={() => navigate("/")}>
           <LogoA />
         </div>
         <div className="cursor-pointer">
@@ -158,7 +161,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         </div>
       </div>
 
-      <div></div>
       {/* <div
         className="lg:flex xl
       :gap-6 gap-5 hidden"
@@ -177,7 +179,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         ))}
       </div> */}
 
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row sm:gap-4 gap-2">
         <div
           className={`xl:w-md sm:w-xs w-32 py-1 px-2.5 pl-3 rounded-sm sm:h-9 h-6 flex  items-center ${
             mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
@@ -204,17 +206,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       >
         <div
           onClick={handleToggle}
-          className={`lg:flex h-8 w-8 items-center justify-center rounded-sm hidden cursor-pointer transition-all duration-300
-            ${
-              mode
-                ? "bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)]"
-                : "bg-inherit border border-gray-300"
-            }`}
+          className={`lg:flex h-8 w-8 items-center justify-center rounded-sm hidden cursor-pointer transition-all duration-300 bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)]
+            ${mode ? "" : " "}`}
         >
           {mode ? (
-            <Moon strokeWidth={2} size={20} className="" stroke="#c3c7cdff" />
+            <Moon strokeWidth={2} size={20} className="" stroke="white" />
           ) : (
-            <Sun size={20} strokeWidth={2} stroke="#c3c7cdff" />
+            <Sun size={20} strokeWidth={2} stroke="white" />
           )}
         </div>
 
@@ -227,7 +225,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             setNotification(false);
           }}
         >
-          <Bell strokeWidth={2} size={20} stroke="#444950" />
+          <Bell strokeWidth={2} size={20} stroke={color} />
           {notification ? <Notification /> : <></>}
         </div>
 
@@ -296,7 +294,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             />
             {profileOption ? (
               <div
-                className={`fixed right-5 top-16 rounded-md w-fit p-6 flex flex-col gap-2 border  text-inherit ${
+                className={`fixed right-5 top-14 rounded-md w-fit p-6 flex flex-col gap-2 border  text-inherit ${
                   mode
                     ? "border-black/20 bg-[#f8f9fa]"
                     : "border-white/25 bg-[#242528]"
@@ -346,8 +344,8 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                     />
                   </div>
                   <div
-                    className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
-                    onClick={() => dispatch(logout())}
+                    className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center cursor-pointer"
+                    onClick={() => signOut(auth)}
                   >
                     <LogOut size={16} />
                     Logout
@@ -361,7 +359,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         )}
       </div>
 
-      <div className="lg:hidden flex flex-row gap-2">
+      <div className="lg:hidden flex flex-row sm:gap-2 gap-1">
         <img
           src={profile}
           alt="Profile"

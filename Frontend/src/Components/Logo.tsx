@@ -10,7 +10,7 @@ export default function LogoA() {
       >
         <defs>
           <linearGradient id="techGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#0052CC" />
+            <stop offset="2%" stopColor="#0052CC" />
             <stop offset="100%" stopColor="#2684FF" />
           </linearGradient>
         </defs>

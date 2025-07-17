@@ -38,7 +38,7 @@ export default function List() {
       [name]: name === "number" ? Number(value) : value,
     }));
   };
-
+  
   const onsubmit = () => {
     if (projectId) {
       dispatch(createSubtask(projectId, inputdata));
@@ -55,7 +55,7 @@ export default function List() {
   };
 
   return (
-    <div>
+    <div className="px-5">
       <div
         className={`overflow-x-auto rounded-2xl shadow-md border mb-2 ${
           mode ? "border-black/20" : "border-black/35"

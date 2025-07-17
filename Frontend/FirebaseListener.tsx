@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../Frontend/firebase";
 import { useDispatch } from "react-redux";
-import { login, logout } from './src/Redux/Actions/authAction'
+import { login, logout } from "./src/Redux/Actions/authAction";
 import type { AppDispatch } from "./src/Redux/store";
 
 export const FirebaseListener = ({
@@ -14,8 +14,20 @@ export const FirebaseListener = ({
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) dispatch(login(user));
-      else dispatch(logout());
+      if (user) {
+        dispatch(
+          login({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          })
+        );
+        console.log("Logged in:", user.displayName);
+      } else {
+        dispatch(logout());
+        console.log("Logged out");
+      }
     });
 
     return () => unsubscribe();

@@ -7,7 +7,7 @@ export interface SafeUser {
   uid: string;
   email: string | null;
   displayName: string | null;
-  photoURL: string | null;
+  photoURL?: string | null;
 }
 
 // Action Interfaces
@@ -24,17 +24,11 @@ export type AuthActionType = LoginActionType | LogoutActionType;
 
 // Action Creators
 
-// ✅ Only store serializable user fields
-import type { User } from "firebase/auth";
+//  Only store serializable user fields
 
-export const login = (user: User): LoginActionType => ({
+export const login = (user: SafeUser): LoginActionType => ({
   type: LOGIN,
-  payload: {
-    uid: user.uid,
-    email: user.email,
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-  },
+  payload: user,
 });
 
 export const logout = (): LogoutActionType => ({

@@ -11,6 +11,7 @@ import {
   User,
   LogOut,
   ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import Notification from "./Notification";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,12 +24,13 @@ import {
   purpleTheme,
   grayTheme,
 } from "../Redux/Actions/themeActions";
-import { logout } from "../Redux/Actions/authAction";
 import Login from "../Pages/Login";
 import SignUp from "../Pages/SignUp";
 import Button from "./Button";
 import Feature from "./Feature";
 import LogoA from "./Logo";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 export default function Navbar2() {
   const profileRef = useRef<HTMLDivElement>(null);
@@ -120,6 +122,8 @@ export default function Navbar2() {
     }
   };
 
+
+
   //useEffect hook to track the mouse event to close the options under profile when profileOtions are true
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -145,17 +149,17 @@ export default function Navbar2() {
   }, [theme]);
 
   const [MobileMenu, setMobileMenu] = useState<boolean>(false);
-
+   const color = mode ? "#444950" : "white";
   return (
     <div
-      className={`flex justify-between items-center h-16 md
+      className={`flex justify-between items-center h-14 md
     sm:px-15 sm:pl-5 px-2 fixed top-0 w-full py-3 z-50 border-b  ${
       mode ? "border-black/20 " : "border-white/25"
     }`}
     >
       <div className="flex items-center gap-1">
         <LogoA />
-        <h1 className="sm:text-3xl text-xl font-extrabold font-Tektur tracking-widest ">
+        <h1 className="sm:text-3xl text-2xl font-extrabold font-Tektur tracking-widest ">
           {Name}
         </h1>
       </div>
@@ -176,7 +180,7 @@ export default function Navbar2() {
               to={item.path}
               onClick={() => handleLink(index)}
               className={({ isActive }) =>
-                `transition-colors duration-200 antialiased tracking-wide font-poppins text-md flex flex-row items-center gap-2 ${
+                `transition-colors group duration-200 antialiased tracking-wide font-poppins text-md flex flex-row items-center gap-2 ${
                   isActive
                     ? "text-[color:var(--secondary-color)] font-semibold"
                     : ""
@@ -187,7 +191,18 @@ export default function Navbar2() {
               }
             >
               {item.text}
-              {item.onhover ? <ChevronDown size={18} /> : ""}
+              {item.onhover ? (
+                <div>
+                  <div className="group-hover:hidden block">
+                    <ChevronDown size={18} />
+                  </div>
+                  <div className="hidden group-hover:block">
+                    <ChevronUp size={18} />
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
             </NavLink>
 
             {/* Hover content for 'Features' only */}
@@ -216,11 +231,15 @@ export default function Navbar2() {
         className="lg:flex items-center xl:gap-8 sm hidden
       :gap-6 gap-4"
       >
-        <div onClick={handleToggle} className="lg:flex hidden">
+        <div
+          onClick={handleToggle}
+          className={`lg:flex h-8 w-8 items-center justify-center rounded-sm hidden cursor-pointer transition-all duration-300 bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)]
+            ${mode ? "" : " "}`}
+        >
           {mode ? (
-            <Moon strokeWidth={2} size={20} className="" stroke="#444950" />
+            <Moon strokeWidth={2} size={20} className="" stroke="white" />
           ) : (
-            <Sun size={20} strokeWidth={2} stroke="#444950" />
+            <Sun size={20} strokeWidth={2} stroke="white" />
           )}
         </div>
 
@@ -233,7 +252,7 @@ export default function Navbar2() {
             setNotification(false);
           }}
         >
-          <Bell strokeWidth={2} size={20} stroke="#444950" />
+          <Bell strokeWidth={2} size={20} stroke={color} />
           {notification ? <Notification /> : <></>}
         </div>
 
@@ -302,8 +321,10 @@ export default function Navbar2() {
             />
             {profileOption ? (
               <div
-                className={`fixed right-5 top-16 rounded-md bg-inherit w-fit p-6 flex flex-col gap-2 border  text-inherit ${
-                  mode ? "border-black/20" : "border-white/25"
+                className={`fixed right-5 top-14 rounded-md bg-inherit w-fit p-6 flex flex-col gap-2 border  text-inherit ${
+                  mode
+                    ? "border-black/20 bg-[#f8f9fa]"
+                    : "border-white/25 bg-[#242528]"
                 }`}
               >
                 <div className="flex gap-2 items-center">
@@ -350,8 +371,8 @@ export default function Navbar2() {
                     />
                   </div>
                   <div
-                    className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
-                    onClick={() => dispatch(logout())}
+                    className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center cursor-pointer"
+                    onClick={() => signOut(auth)}
                   >
                     <LogOut size={16} />
                     Logout
@@ -365,7 +386,7 @@ export default function Navbar2() {
         )}
       </div>
 
-      <div className="lg:hidden flex flex-row gap-2">
+      <div className="lg:hidden flex flex-row sm:gap-2 gap-1">
         <img
           src={profile}
           alt="Profile"
@@ -453,7 +474,7 @@ export default function Navbar2() {
               </div>
               <div
                 className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
-                onClick={() => dispatch(logout())}
+                onClick={()=> signOut(auth)}
               >
                 <LogOut size={16} />
                 Logout

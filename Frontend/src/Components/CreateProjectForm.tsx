@@ -32,10 +32,10 @@ export default function CreProjectForm() {
     resolver: zodResolver(schema),
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  
 
   const onSubmit = (data: FormType) => {
-
     const newProject = {
       uuid: uuidv4(),
       heading: data.Heading,
@@ -52,8 +52,8 @@ export default function CreProjectForm() {
 
   return (
     <section
-      className={`rounded-xl p-6 shadow-lg w-full text-inherit max-w-md transition-colors ${
-        mode ? "bg-white" : "bg-[#1e1e1e]"
+      className={`rounded-xl md:p-6 p-2 shadow-lg w-full text-inherit max-w-md transition-colors ${
+        mode ? "bg-white" : "bg-[#1a1b1e]/60 border-gray-800"
       }`}
     >
       <h2 className="text-2xl font-semibold mb-6 text-center">
@@ -70,7 +70,9 @@ export default function CreProjectForm() {
             id="Heading"
             type="text"
             {...register("Heading")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className={`w-full px-3 py-2 border  rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
             placeholder="Enter project heading"
           />
           {errors.Heading && (
@@ -90,7 +92,9 @@ export default function CreProjectForm() {
             rows={5}
             cols={5}
             {...register("Description")}
-            className="w-full px-3 py-2 h-20 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className={`w-full px-3 py-2 h-20 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
             placeholder="Project description (max 100 chars)"
           ></textarea>
           {errors.Description && (
@@ -109,7 +113,9 @@ export default function CreProjectForm() {
             id="startDate"
             type="date"
             {...register("startDate")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className={`w-full px-3 py-2 border  rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
           />
           {errors.startDate && (
             <p className="text-red-500 text-xs mt-1">
@@ -127,7 +133,9 @@ export default function CreProjectForm() {
             id="deadline"
             type="date"
             {...register("deadline")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className={`w-full px-3 py-2 border  rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
           />
           {errors.deadline && (
             <p className="text-red-500 text-xs mt-1">
@@ -144,7 +152,9 @@ export default function CreProjectForm() {
           <select
             id="status"
             {...register("status")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className={`w-full px-3 py-2 border  rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none${
+              mode ? "border-gray-300" : "border-gray-800"
+            }`}
           >
             <option value="">Select status</option>
             <option value="To Do">To Do</option>
@@ -159,7 +169,7 @@ export default function CreProjectForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition"
+          className="w-full bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] hover:bg-blue-700 text-white font-medium py-2 rounded-md transition"
         >
           Create Project
         </button>

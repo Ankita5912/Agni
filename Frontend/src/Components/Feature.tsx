@@ -6,7 +6,7 @@ export default function Feature() {
 
   return (
     <div
-      className={`fixed flex flex-row gap-10 text-sm p-15 z-50 font-poppins border top-15 rounded-sm ${
+      className={`fixed flex flex-row gap-10 text-sm p-15 z-50 font-poppins border top-13 rounded-sm ${
         mode ? "bg-white border-black/20" : "bg-[#1e1e1e] border-white/25"
       }`}
     >
