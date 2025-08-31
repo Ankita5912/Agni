@@ -54,7 +54,7 @@ export default function ProjectUpdateForm({ id }: propType) {
   const fetchTeamsByQuery = async () => {
     try {
       const results = await axios.get(
-        `http://localhost:5000/api/teams/search?search=${inputValueChanging}`,
+        `https://agni-9mw4.onrender.com/api/teams/search?search=${inputValueChanging}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

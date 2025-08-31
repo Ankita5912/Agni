@@ -46,7 +46,7 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
 
   const submit = async (data: SchemaType) => {
     try {
-      const result = await axios.post(`http://localhost:5000/api/auth/register`, data);
+      const result = await axios.post(`https://agni-9mw4.onrender.com/api/auth/register`, data);
       if (!result) {
         toast.error('validation failed')
       }

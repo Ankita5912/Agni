@@ -36,7 +36,7 @@ export const fetchSubtasks = createAsyncThunk<
 >("subtasks/fetchByProject", async (projectId, thunkAPI) => {
   try {
     const res = await axios.get(
-      `http://localhost:5000/api/projects/${projectId}/subtasks`,{
+      `https://agni-9mw4.onrender.com/api/projects/${projectId}/subtasks`,{
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -58,7 +58,7 @@ export const createSubtask = createAsyncThunk<
 >("subtasks/create", async ({ projectId, subtask }, thunkAPI) => {
   try {
     const res = await axios.post(
-      `http://localhost:5000/api/projects/${projectId}/subtasks`,
+      `https://agni-9mw4.onrender.com/api/projects/${projectId}/subtasks`,
       subtask, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -81,7 +81,7 @@ export const updateSubtask = createAsyncThunk<
 >("subtasks/update", async ({ uuid,  updates }, thunkAPI) => {
   try {
     const res = await axios.patch(
-      `http://localhost:5000/api/projects/subtasks/${uuid}`, // 🔹 uuid passed in params
+      `https://agni-9mw4.onrender.com/api/projects/subtasks/${uuid}`, // 🔹 uuid passed in params
       updates, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -103,7 +103,7 @@ export const deleteSubtask = createAsyncThunk<string, string>(
   "subtasks/delete",
   async (uuid, thunkAPI) => {
     try {
-      await axios.delete(`http://localhost:5000/api/projects/subtasks/${uuid}`, {
+      await axios.delete(`https://agni-9mw4.onrender.com/api/projects/subtasks/${uuid}`, {
         headers: {
         'Authorization': `Bearer ${token}`
       }

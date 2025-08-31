@@ -41,7 +41,7 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
   //Form submission handler
   const submit = async (data: SchemaType) => {
     try {
-      const result = await axios.post("http://localhost:5000/api/auth/login", {
+      const result = await axios.post("https://agni-9mw4.onrender.com/api/auth/login", {
         email: data.email,
         password: data.password,
       });

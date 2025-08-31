@@ -38,7 +38,7 @@ export const fetchProjects = createAsyncThunk<
   { rejectValue: string }
 >("projects/fetchAll", async (_, thunkAPI) => {
   try {
-    const res = await axios.get("http://localhost:5000/api/projects", {
+    const res = await axios.get("https://agni-9mw4.onrender.com/api/projects", {
       headers: {
         Authorization : `Bearer ${token}`,
       },
@@ -58,7 +58,7 @@ export const createProject = createAsyncThunk<
   Omit<ProjectType, "_id">
 >("projects/create", async (project, thunkAPI) => {
   try {
-    const res = await axios.post("http://localhost:5000/api/projects",  project , {
+    const res = await axios.post("https://agni-9mw4.onrender.com/api/projects",  project , {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -79,7 +79,7 @@ export const updateProject = createAsyncThunk<
 >("projects/update", async ({ uuid, updates }, thunkAPI) => {
   try {
     const res = await axios.patch(
-      `http://localhost:5000/api/projects/${uuid}`,
+      `https://agni-9mw4.onrender.com/api/projects/${uuid}`,
       updates, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -103,7 +103,7 @@ export const deleteProject = createAsyncThunk<
   { rejectValue: string }
 >("projects/delete", async (uuid, thunkAPI) => {
   try {
-    await axios.delete(`http://localhost:5000/api/projects/${uuid}`, {
+    await axios.delete(`https://agni-9mw4.onrender.com/api/projects/${uuid}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

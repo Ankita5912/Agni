@@ -24,7 +24,7 @@ export default function CreateTeamForm() {
   const fetchUsers = async (search: string) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/users?search=${search}`,
+        `https://agni-9mw4.onrender.com/api/users?search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

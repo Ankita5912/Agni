@@ -31,7 +31,7 @@ export const createTeam = createAsyncThunk<Team, Omit<Team, "_id">>(
   "teams/createTeam",
   async (teamData, thunkAPI) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/teams", teamData,{
+      const res = await axios.post("https://agni-9mw4.onrender.com/api/teams", teamData,{
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -51,7 +51,7 @@ export const fetchTeams = createAsyncThunk<Team[]>(
   "teams/fetchTeams",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/teams",{
+      const res = await axios.get("https://agni-9mw4.onrender.com/api/teams",{
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -70,7 +70,7 @@ export const deleteTeam = createAsyncThunk(
   "team/deleteTeam",
   async (teamId: string, thunkAPI) => {
     try {
-      await axios.delete(`http://localhost:5000/api/teams/${teamId}`,{
+      await axios.delete(`https://agni-9mw4.onrender.com/api/teams/${teamId}`,{
       headers: {
         'Authorization': `Bearer ${token}`
       }

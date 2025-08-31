@@ -32,7 +32,7 @@ export const fetchUser = createAsyncThunk<User>(
   "user/fetchUser",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users/user",{
+      const res = await axios.get("https://agni-9mw4.onrender.com/api/users/user",{
       headers: {
         'Authorization': `Bearer ${token}`
       }
