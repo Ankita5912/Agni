@@ -9,7 +9,7 @@ export default function LoginProtected({
 }: {
   children: JSX.Element;
 }) {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.user.user);
 
   if (user === null) return <Navigate to="/login" replace />;
   if (user === undefined) return <Loader />; // only if your reducer might return undefined

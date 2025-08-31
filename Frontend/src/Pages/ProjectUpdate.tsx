@@ -134,7 +134,6 @@ export default function ProjectUpdateForm({ id }: propType) {
         </label>
         <input
           type="text"
-          name="heading"
           value={projectbyId?.heading}
           {...register("heading")}
           className={`w-full border focus:border-0  px-3 py-2 rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:outline-none ${
@@ -157,7 +156,6 @@ export default function ProjectUpdateForm({ id }: propType) {
           Description
         </label>
         <textarea
-          name="description"
           rows={3}
           {...register("description")}
           className={`w-full border focus:border-0  px-3 py-2 rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:outline-none ${
@@ -179,7 +177,6 @@ export default function ProjectUpdateForm({ id }: propType) {
           Status
         </label>
         <select
-          name="status"
           {...register("status")}
           className={`w-full border focus:border-0  px-3 py-2 rounded-md focus:ring-2 focus:ring-[var(--primary-color)] focus:outline-none ${
             mode ? "border-gray-300" : "border-gray-800"

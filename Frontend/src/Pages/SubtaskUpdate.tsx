@@ -39,7 +39,7 @@ export default function SubtaskUpdateForm({ id }: subtaskUpdateProptype) {
     resolver: zodResolver(subtaskSchema),
     defaultValues: {
       heading: subtaskId?.heading?? "",
-      status: subtaskId?.status?? "",
+      status: subtaskId?.status,
       assignedTo: subtaskId?.assignedTo ?? '',
     },
   });
