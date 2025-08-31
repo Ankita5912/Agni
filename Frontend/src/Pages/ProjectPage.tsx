@@ -5,7 +5,7 @@ import type { JSX } from "react/jsx-runtime";
 import { FolderTree, Columns4, ListTodo, Plus } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { ProjectType } from "../Redux/Actions/projectAction";
+import type { ProjectType } from "../Redux/Slice/projectSlice";
 
 export default function ProjectPage() {
   const mode = useSelector<RootState>((state) => state.mode.mode);
@@ -42,7 +42,7 @@ export default function ProjectPage() {
 
   useEffect(() => {
     const findProject = () => {
-      const result = Project.find((p) => p.uuid === projectId);
+      const result = Project.find((p) => p._id === projectId);
       setProject(result);
     };
     findProject();
@@ -76,7 +76,7 @@ export default function ProjectPage() {
                 mode ? "font-medium text-2sm " : "text-md  font-extralight"
               } ${
                 isActive
-                  ? "border-b-4 text-[var(--secondary-color)] items-center border-[var(--secondary-color)]"
+                  ? "border-b-3 text-[var(--secondary-color)] items-center border-[var(--secondary-color)]"
                   : ` ${mode ? "" : " "}`
               }`
             }

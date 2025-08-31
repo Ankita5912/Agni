@@ -4,13 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import { useNavigate } from "react-router-dom";
-import { createProject } from "../Redux/Actions/projectAction";
-import { v4 as uuidv4 } from 'uuid';
+import { createProject } from "../Redux/Slice/projectSlice";
 import type { AppDispatch } from "../Redux/store";
+import toast from "react-hot-toast";
 
 const schema = z.object({
-  Heading: z.string().min(4, "Heading must be at least 4 characters"),
-  Description: z.string().max(100, "Description must be under 100 characters"),
+  Heading: z.string().min(2, "Heading must be at least 2 characters"),
+  Description: z.string().max(100, "Description must be under 100 characters").optional(),
   status: z.enum(["To Do", "In Progress", "Review", "Completed"], {
     required_error: "Please select a status",
   }),
@@ -35,19 +35,30 @@ export default function CreProjectForm() {
   const navigate = useNavigate();
   
 
-  const onSubmit = (data: FormType) => {
-    const newProject = {
-      uuid: uuidv4(),
-      heading: data.Heading,
-      description: data.Description,
-      status: data.status,
-      startDate: new Date(data.startDate),
-      deadline: new Date(data.deadline),
-      team: "Default Team",
-      subtask: [],
-    };
-    dispatch(createProject(newProject));
-    navigate("/kanban");
+  const onSubmit = async (data: FormType) => {
+    try {
+      const newProject = {
+        heading: data.Heading,
+        description: data.Description,
+        status: data.status,
+        startDate: new Date(data.startDate),
+        deadline: new Date(data.deadline),
+        team: "Default Team",
+      };
+      const result = await dispatch(createProject(newProject));
+      navigate("/kanban");
+
+      const payload = result.payload as { message?: string } | string;
+      toast.success(
+        typeof payload === "string"
+          ? payload
+          : payload && typeof payload === "object" && "message" in payload && typeof payload.message === "string"
+            ? payload.message
+            : "Project created successfully"
+      );
+    } catch (error) {
+      toast.error((error as Error)?.message || "An error occurred")
+    }
   };
 
   return (
@@ -63,8 +74,13 @@ export default function CreProjectForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Heading */}
         <div>
-          <label htmlFor="Heading" className="block text-sm mb-1">
-            Project Heading
+          <label
+            htmlFor="Heading"
+            className={`block text-sm mb-1 ${
+              mode ? "text-[#444950] font-medium" : "font-light"
+            }`}
+          >
+            Project Heading<span className="text-red-700">*</span>
           </label>
           <input
             id="Heading"
@@ -84,8 +100,13 @@ export default function CreProjectForm() {
 
         {/* Description */}
         <div>
-          <label htmlFor="Description" className="block text-sm mb-1">
-            Description
+          <label
+            htmlFor="Description"
+            className={`block text-sm mb-1 ${
+              mode ? "text-[#444950] font-medium" : "font-light"
+            }`}
+          >
+            Description<span className="text-red-700">*</span>
           </label>
           <textarea
             id="Description"
@@ -106,8 +127,13 @@ export default function CreProjectForm() {
 
         {/* Start Date */}
         <div>
-          <label htmlFor="startDate" className="block text-sm mb-1">
-            Start Date
+          <label
+            htmlFor="startDate"
+            className={`block text-sm mb-1 ${
+              mode ? "text-[#444950] font-medium" : "font-light"
+            }`}
+          >
+            Start Date<span className="text-red-700">*</span>
           </label>
           <input
             id="startDate"
@@ -126,8 +152,13 @@ export default function CreProjectForm() {
 
         {/* Deadline */}
         <div>
-          <label htmlFor="deadline" className="block text-sm mb-1">
-            Deadline
+          <label
+            htmlFor="deadline"
+            className={`block text-sm mb-1 ${
+              mode ? "text-[#444950] font-medium" : "font-light"
+            }`}
+          >
+            Deadline<span className="text-red-700">*</span>
           </label>
           <input
             id="deadline"
@@ -146,8 +177,13 @@ export default function CreProjectForm() {
 
         {/* Status */}
         <div>
-          <label htmlFor="status" className="block text-sm mb-1">
-            Status
+          <label
+            htmlFor="status"
+            className={`block text-sm mb-1 ${
+              mode ? "text-[#444950] font-medium" : "font-light"
+            }`}
+          >
+            Status<span className="text-red-700">*</span>
           </label>
           <select
             id="status"
@@ -169,7 +205,7 @@ export default function CreProjectForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] hover:bg-blue-700 text-white font-medium py-2 rounded-md transition"
+          className="w-full bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] hover:bg-blue-700 text-white font-medium py-2 rounded-md transition-all hover:opacity-95 active:scale-95 duration-200"
         >
           Create Project
         </button>

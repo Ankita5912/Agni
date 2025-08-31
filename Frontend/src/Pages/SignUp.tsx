@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { useForm } from 'react-hook-form'
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
-import { FirebaseError } from "firebase/app";
+import axios from "axios";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import { useSelector } from "react-redux";
 
+import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 type SignUpProps = {
   loginPage: (value: boolean) => void;
   signUpPage: (value: boolean) => void;
@@ -17,8 +17,18 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
     .object({
       name: z.string().min(2, "Name must be at least 2 characters"),
       email: z.string().email("Invalid email"),
-      phoneNo: z.string().min(10, "Phone number too short").max(12, "Phone number too long"),
-      password: z.string().min(8, "Password must be at least 8 characters").max(32),
+      username: z
+            .string()
+            .min(3, "user name must be at least 3 characters")
+            .max(20, "Username must be at most 20 characters")
+            .regex(
+              /^[a-zA-Z0-9_]+$/,
+              "Username can only contain letters, numbers, and underscores"
+            ),
+      password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .max(32),
       confirmPassword: z.string().min(8).max(32),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -28,26 +38,25 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
 
   type SchemaType = z.infer<typeof schema>;
 
-  const { register, handleSubmit,
+  const {
+    register,
+    handleSubmit,
     formState: { errors },
-  } = useForm<SchemaType>({resolver: zodResolver(schema),});
+  } = useForm<SchemaType>({ resolver: zodResolver(schema) });
 
-  const submit = async(data: SchemaType) => {
+  const submit = async (data: SchemaType) => {
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
-      alert("successfully login")
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        alert(error.message);
-      } else {
-        alert("An unexpected error occurred.");
+      const result = await axios.post(`http://localhost:5000/api/auth/register`, data);
+      if (!result) {
+        toast.error('validation failed')
       }
+      toast.success('register successfull')
+    } catch (error) {
+      toast.error((error as Error)?.message || "An error occurred")
     }
-    console.log(data)
   };
 
   const mode = useSelector((state: RootState) => state.mode.mode);
-
 
   return (
     <div
@@ -89,17 +98,17 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
         </div>
 
         <div>
-          <label className="block text-sm">Phone No</label>
+          <label className="block text-sm">Username</label>
           <input
             type="text"
             className={`w-full p-1.5 border rounded mt-1 placeholder:text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none ${
               mode ? "border-gray-300" : "border-gray-800"
             }`}
-            {...register("phoneNo")}
-            placeholder="Phone No"
+            {...register("username")}
+            placeholder="username"
           />
-          {errors.phoneNo && (
-            <p className="text-red-500 text-sm">{errors.phoneNo.message}</p>
+          {errors.username && (
+            <p className="text-red-500 text-sm">{errors.username.message}</p>
           )}
         </div>
 

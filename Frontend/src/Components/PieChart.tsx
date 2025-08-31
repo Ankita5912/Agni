@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import {
   PieChart,
   Pie,
@@ -47,4 +49,4 @@ const StatusPieChart: React.FC<StatusPieChartProps> = ({ data }) => {
   );
 };
 
-export default StatusPieChart;
+export default memo(StatusPieChart);

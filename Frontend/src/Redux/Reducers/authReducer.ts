@@ -1,20 +1,22 @@
-import type { AuthActionType, SafeUser } from "../Actions/authAction";
+import type { AuthActionType } from "../Actions/authAction";
 import { LOGIN, LOGOUT } from "../Actions/authAction";
 
 interface stateType{
-  user: SafeUser | null;
+  token: string | null;
 }
 
+const token = localStorage.getItem('token')
+
 const initialState: stateType = {
-  user : null,
+  token : null,
 }
 
 export const authReducer = (state: stateType = initialState, action: AuthActionType): stateType => {
   switch (action.type) {
     case LOGIN:
-      return { ...state, user: action.payload }
+      return { ...state, token: token }
     case LOGOUT:
-      return { ...state, user: null }
+      return { ...state, token: null }
     default:
       return state;
   }

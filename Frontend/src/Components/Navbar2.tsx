@@ -6,9 +6,9 @@ import {
   Sun,
   Bell,
   EllipsisVertical,
-  Settings,
+  // Settings,
   Palette,
-  User,
+  // User,
   LogOut,
   ChevronDown,
   ChevronUp,
@@ -29,17 +29,17 @@ import SignUp from "../Pages/SignUp";
 import Button from "./Button";
 import Feature from "./Feature";
 import LogoA from "./Logo";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
-
+import toast from "react-hot-toast";
+import { logout } from "../Redux/Actions/authAction";
+import { fetchUser } from "../Redux/Slice/userSlice";
 export default function Navbar2() {
   const profileRef = useRef<HTMLDivElement>(null);
 
   const mode = useSelector((state: RootState) => state.mode.mode);
   const dispatch = useDispatch<AppDispatch>();
-
+  const user = useSelector((state: RootState) => state.user.user);
   const theme = useSelector((state: RootState) => state.theme);
-  const user = useSelector((state: RootState) => state.auth.user);
+  const token = localStorage.getItem('token')
   const [notification, setNotification] = useState<boolean>(false);
   const [profileOption, setprofileOption] = useState<boolean>(false);
 
@@ -68,7 +68,7 @@ export default function Navbar2() {
     img: string;
     Name: string;
     NavsubItems: NavSubItem[];
-    profile: string;
+    profile: string | null;
   }
 
   //Object containing navitem
@@ -86,11 +86,10 @@ export default function Navbar2() {
       },
       { text: "Projects", isActive: false, path: "/projects", onhover: false },
     ],
-    profile: "",
+    profile: user?.avatarUrl,
   };
-
   //destructuring some keys from object Navitems
-  const { Name, profile } = navitems;
+  const { Name } = navitems;
 
   const [navsubItems, setNavsubItems] = useState<NavSubItem[]>(
     navitems.NavsubItems
@@ -122,8 +121,6 @@ export default function Navbar2() {
     }
   };
 
-
-
   //useEffect hook to track the mouse event to close the options under profile when profileOtions are true
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -147,15 +144,17 @@ export default function Navbar2() {
     root.style.setProperty("--secondary-color", theme.secondaryColor);
     root.style.setProperty("--text-color", theme.textColor);
   }, [theme]);
-
+   useEffect(() => {
+    dispatch(fetchUser());
+   }, [])
+  
   const [MobileMenu, setMobileMenu] = useState<boolean>(false);
-   const color = mode ? "#444950" : "white";
+  const color = mode ? "#444950" : "white";
   return (
     <div
       className={`flex justify-between items-center h-14 md
-    sm:px-15 sm:pl-5 px-2 fixed top-0 w-full py-3 z-50 border-b  ${
-      mode ? "border-black/20 " : "border-white/25"
-    }`}
+    sm:px-15 sm:pl-5 px-2 fixed top-0 w-full py-3 z-50 border-b  ${mode ? "border-black/20 " : "border-white/25"
+        }`}
     >
       <div className="flex items-center gap-1">
         <LogoA />
@@ -180,10 +179,9 @@ export default function Navbar2() {
               to={item.path}
               onClick={() => handleLink(index)}
               className={({ isActive }) =>
-                `transition-colors group duration-200 antialiased tracking-wide font-poppins text-md flex flex-row items-center gap-2 ${
-                  isActive
-                    ? "text-[color:var(--secondary-color)] font-semibold"
-                    : ""
+                `transition-colors group duration-200 antialiased tracking-wide font-poppins text-md flex flex-row items-center gap-2 ${isActive
+                  ? "text-[color:var(--secondary-color)] font-semibold"
+                  : ""
                 }`
               }
               style={({ isActive }) =>
@@ -257,7 +255,7 @@ export default function Navbar2() {
         </div>
 
         {/*profile option*/}
-        {user === null ? (
+        {token === null ? (
           <>
             <div onClick={() => setShowPage(true)}>
               <Button buttonName="Login" />
@@ -271,9 +269,8 @@ export default function Navbar2() {
                   onClick={() => setShowPage(false)}
                 ></div>
                 <div
-                  className={`flex items-center justify-center h-full ${
-                    mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
-                  }`}
+                  className={`flex items-center justify-center h-full ${mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
+                    }`}
                 >
                   <Login
                     signUpPage={(value) => {
@@ -294,9 +291,8 @@ export default function Navbar2() {
                   onClick={() => setSignupPage(false)}
                 ></div>
                 <div
-                  className={`flex items-center justify-center h-full shadow-2xl ${
-                    mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
-                  }`}
+                  className={`flex items-center justify-center h-full shadow-2xl ${mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
+                    }`}
                 >
                   <SignUp
                     loginPage={(value) => {
@@ -312,22 +308,25 @@ export default function Navbar2() {
         ) : (
           <div ref={profileRef}>
             <img
-              src={undefined}
+                src={
+                  navitems?.profile
+                    ? navitems.profile
+                    : './Profile.png'
+                }
               alt="Profile"
-              className="md:w-8 md:h-8 sm:h-7 sm:w-7 w-6 h-6  rounded-full"
+              className="md:w-10 md:h-10 sm:h-7 sm:w-7 w-6 h-6  rounded-full"
               onClick={() => {
                 setprofileOption(!profileOption);
               }}
             />
             {profileOption ? (
               <div
-                className={`fixed right-5 top-14 rounded-md bg-inherit w-fit p-6 flex flex-col gap-2 border  text-inherit ${
-                  mode
+                className={`fixed right-5 top-14 rounded-md bg-inherit w-fit p-6 flex flex-col gap-2 border  text-inherit ${mode
                     ? "border-black/20 bg-[#f8f9fa]"
                     : "border-white/25 bg-[#242528]"
-                }`}
+                  }`}
               >
-                <div className="flex gap-2 items-center">
+                {/* <div className="flex gap-2 items-center">
                   <User size={16} />
                   <span className="tracking-wide font-poppins text-sm antialiased">
                     Account
@@ -338,7 +337,14 @@ export default function Navbar2() {
                   <span className="tracking-wide font-poppins text-sm antialiased">
                     Settting
                   </span>
-                </div>
+                </div> */}
+                  <div className="flex gap-4 items-center">
+                    <img src={user.avatarUrl} alt="profile" className="h-10 w-10 rounded-full" />
+                    <span className="tracking-wide font-poppins text-lg antialiased">
+                      {user.name}
+                    </span>
+                  </div>
+                  <hr className="text-gray-300" />
                 <div className="flex flex-col gap-3">
                   <h1 className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center">
                     <Palette size={16} />
@@ -372,7 +378,7 @@ export default function Navbar2() {
                   </div>
                   <div
                     className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center cursor-pointer"
-                    onClick={() => signOut(auth)}
+                    onClick={() => { localStorage.removeItem('token'); dispatch(logout()); toast.success("Logout successful"); }}
                   >
                     <LogOut size={16} />
                     Logout
@@ -386,11 +392,11 @@ export default function Navbar2() {
         )}
       </div>
 
-      <div className="lg:hidden flex flex-row sm:gap-2 gap-1">
+      <div className="lg:hidden flex flex-row sm:gap-2 gap-1 items-center">
         <img
-          src={profile}
+          src='./profile'
           alt="Profile"
-          className="md:w-8 md:h-8 sm:h-7 sm:w-7 w-6 h-6 rounded-full"
+          className="md:w-8 md:h-8 sm:h-7 sm:w-7 w-7 h-7 rounded-full"
         />
 
         <div className="">
@@ -401,17 +407,15 @@ export default function Navbar2() {
       {MobileMenu ? (
         <>
           <div
-            className={`fixed inset-0 z-40 ${
-              mode ? " bg-black/5" : "bg-white/10"
-            }`}
+            className={`fixed inset-0 z-40 ${mode ? " bg-black/5" : "bg-white/10"
+              }`}
             onClick={() => setMobileMenu(false)}
           />
 
           {/* Mobile Drawer */}
           <div
-            className={`fixed top-0 right-0 z-50 h-full w-3/4 sm:w-1/2 md:w-1/3   shadow-lg transform transition-transform duration-300 ease-in-out ${
-              MobileMenu ? "translate-x-0" : "translate-x-full"
-            } ${mode ? "bg-white text-inherit" : "bg-black text-inherit"}`}
+            className={`fixed top-0 right-0 z-50 h-full w-3/4 sm:w-1/2 md:w-1/3   shadow-lg transform transition-transform duration-300 ease-in-out ${MobileMenu ? "translate-x-0" : "translate-x-full"
+              } ${mode ? "bg-white text-inherit" : "bg-black text-inherit"}`}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-300">
@@ -431,11 +435,10 @@ export default function Navbar2() {
                     handleLink(index);
                     setMobileMenu(false);
                   }}
-                  className={`font-poppins text-sm font-light tracking-wide transition-all duration-150 ${
-                    item.isActive
+                  className={`font-poppins text-sm font-light tracking-wide transition-all duration-150 ${item.isActive
                       ? "text-[var(--primary-color)] font-semibold"
                       : ""
-                  }`}
+                    }`}
                 >
                   {item.text}
                 </NavLink>
@@ -446,10 +449,10 @@ export default function Navbar2() {
 
             {/* Settings & Theme */}
             <div className="p-4 flex flex-col gap-3">
-              <span className="font-poppins text-sm font-medium">Account</span>
+              {/* <span className="font-poppins text-sm font-medium">Account</span>
               <span className="font-poppins text-sm font-light tracking-wide">
                 Settings
-              </span>
+              </span> */}
 
               <div className="mt-4">
                 <h3 className="font-poppins text-sm font-medium mb-2">Theme</h3>
@@ -474,7 +477,7 @@ export default function Navbar2() {
               </div>
               <div
                 className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center"
-                onClick={()=> signOut(auth)}
+                onClick={() => localStorage.removeItem('token')}
               >
                 <LogOut size={16} />
                 Logout

@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { memo } from "react";
 
 interface ProjectData {
   heading: string;
@@ -19,7 +20,7 @@ interface Props {
   data: ProjectData[];
 }
 
-export default function LineChart2({ data }: Props) {
+function LineChart2({ data }: Props) {
   const today = new Date();
 
   const chartData = data.map((project) => {
@@ -45,7 +46,7 @@ export default function LineChart2({ data }: Props) {
   });
 
   return (
-    <ResponsiveContainer width="90%" height={400}>
+    <ResponsiveContainer width="100%" height={400}>
       <LineChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
@@ -89,3 +90,5 @@ export default function LineChart2({ data }: Props) {
     </ResponsiveContainer>
   );
 }
+
+export default memo(LineChart2);

@@ -10,7 +10,7 @@ export default function HomePage() {
     <div className="relative overflow-hidden">
       <Navbar2 />
       <main className="flex flex-col w-full items-center justify-center px-3">
-        <div className="max-w-4xl w-full text-center mt-32">
+        <div className="relative max-w-4xl w-full text-center mt-32">
           <h1
             className={`sm:text-6xl/tight text-3xl sm:font-extrabold font-bold font-josphin mb-6 ${
               mode ? "text-black" : "text-white"
@@ -30,13 +30,14 @@ export default function HomePage() {
           <div className="absolute -mt-30 ml-118 h-fit w-fit rotate-26">
             <img src="/arrow.png" className="h-62"></img>
           </div>
-          <div onClick={() => navigate("/create-project")}>
+          
             <button
-              className={`sm:text-base text-xs sm:font-semibold font-normal tracking-wide  font-Manrope bg-blend-color-burn sm:h-12 h-10  max-w-fit py-1 sm:px-5 px-4 cursor-pointer rounded-full bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white`}
+              className={`sm:text-base text-xs sm:font-semibold font-normal tracking-wide  font-Manrope bg-blend-color-burn sm:h-12 h-10 z-50 max-w-fit py-1 sm:px-5 px-4 cursor-pointer rounded-full bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white`}
+              onClick={() => navigate("/create-project")}
             >
               Create New Project
             </button>
-          </div>
+         
           <h1
             className={`sm:text-base text-sm sm:font-bold font-semibold font-Manrope  mt-6 ${
               mode ? "text-[#444950]" : "text-inherit"

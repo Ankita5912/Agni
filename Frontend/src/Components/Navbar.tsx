@@ -7,9 +7,9 @@ import {
   Bell,
   Search,
   EllipsisVertical,
-  Settings,
+  // Settings,
   Palette,
-  User,
+  // User,
   LogOut,
   PanelLeft,
 } from "lucide-react";
@@ -29,8 +29,7 @@ import Login from "../Pages/Login";
 import SignUp from "../Pages/SignUp";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
+import { fetchUser } from "../Redux/Slice/userSlice";
 
 type NavbarProps = {
   toggleSidebar: () => void;
@@ -43,7 +42,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   const dispatch = useDispatch<AppDispatch>();
 
   const theme = useSelector((state: RootState) => state.theme);
-  const user = useSelector((state: RootState) => state.auth.user);
+  const token = localStorage.getItem('token')
   const [notification, setNotification] = useState<boolean>(false);
   const [profileOption, setprofileOption] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -71,7 +70,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     NavsubItems: NavSubItem[];
     profile: string;
   }
-
+  const user = useSelector((state: RootState) => state.user.user);
   //Object containing navitem
   const navitems: NavItem = {
     Name: "AGNI",
@@ -81,12 +80,8 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       { text: "Services", isActive: false, path: "/services" },
       { text: "Contact", isActive: false, path: "/contact" },
     ],
-    profile: "",
+    profile: user?.avatarUrl,
   };
-
-  //destructuring some keys from object Navitems
-  const { profile } = navitems;
-
   const [showLoginPage, setShowPage] = useState<boolean>(false);
 
   const [showSignupPage, setSignupPage] = useState<boolean>(false);
@@ -128,7 +123,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     }
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [profileOption]);
-
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
   //dynamically changing the color mention in the index.css file to change it according to the theme colors store in redux store that are changing acc to user input
   useEffect(() => {
     const root = document.documentElement;
@@ -139,6 +136,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
   const [MobileMenu, setMobileMenu] = useState<boolean>(false);
   const color = mode ? '#444950' : 'white';
+  
 
   return (
     <div
@@ -179,7 +177,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         ))}
       </div> */}
 
-      <div className="flex flex-row sm:gap-4 gap-2">
+      <div className="flex flex-row items-center place-content-center sm:gap-4 gap-2">
         <div
           className={`xl:w-md sm:w-xs w-32 py-1 px-2.5 pl-3 rounded-sm sm:h-9 h-6 flex  items-center ${
             mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
@@ -230,7 +228,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         </div>
 
         {/*profile option*/}
-        {user === null ? (
+        {token === null ? (
           <>
             <div onClick={() => setShowPage(true)}>
               <Button buttonName="Login" />
@@ -244,9 +242,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                   onClick={() => setShowPage(false)}
                 ></div>
                 <div
-                  className={`flex items-center justify-center h-full ${
-                    mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
-                  }`}
+                  className={`flex items-center justify-center h-full ${mode ? "bg-blue-950/30" : "bg-black/60"}`}
                 >
                   <Login
                     signUpPage={(value) => {
@@ -267,9 +263,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                   onClick={() => setSignupPage(false)}
                 ></div>
                 <div
-                  className={`flex items-center justify-center h-full shadow-2xl ${
-                    mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
-                  }`}
+                  className={`flex items-center justify-center h-full shadow-2xl ${mode ? "bg-blue-950/30" : "bg-black/60"}`}
                 >
                   <SignUp
                     loginPage={(value) => {
@@ -285,9 +279,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         ) : (
           <div ref={profileRef}>
             <img
-              src={undefined}
+                src={
+                  navitems?.profile
+                    ? navitems.profile
+                    : './Profile.png'
+                }
               alt="Profile"
-              className="md:w-8 md:h-8 sm:h-7 sm:w-7 w-6 h-6  rounded-full"
+              className="md:w-10 md:h-10 sm:h-7 sm:w-7 w-6 h-7  rounded-full"
               onClick={() => {
                 setprofileOption(!profileOption);
               }}
@@ -300,7 +298,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                     : "border-white/25 bg-[#242528]"
                 }`}
               >
-                <div className="flex gap-2 items-center">
+                {/* <div className="flex gap-2 items-center">
                   <User size={16} />
                   <span className="tracking-wide font-poppins text-sm antialiased">
                     Account
@@ -311,7 +309,14 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                   <span className="tracking-wide font-poppins text-sm antialiased">
                     Settting
                   </span>
-                </div>
+                </div> */}
+                  <div className="flex gap-4 items-center">
+                    <img src={user.avatarUrl} alt="profile" className="h-10 w-10 rounded-full"/>
+                    <span className="tracking-wide font-poppins text-lg antialiased">
+                      {user.name}
+                    </span>
+                  </div>
+                  <hr className="text-gray-300"/>
                 <div className="flex flex-col gap-3">
                   <h1 className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center">
                     <Palette size={16} />
@@ -345,7 +350,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                   </div>
                   <div
                     className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center cursor-pointer"
-                    onClick={() => signOut(auth)}
+                    onClick={() => localStorage.removeItem('token')}
                   >
                     <LogOut size={16} />
                     Logout
@@ -359,11 +364,11 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         )}
       </div>
 
-      <div className="lg:hidden flex flex-row sm:gap-2 gap-1">
+      <div className="lg:hidden flex flex-row sm:gap-2 items-center">
         <img
-          src={profile}
+          src={navitems.profile}
           alt="Profile"
-          className="md:w-8 md:h-8 sm:h-7 sm:w-7 w-6 h-6 rounded-full"
+          className="md:w-8 md:h-8 md:block hidden rounded-full"
         />
 
         <div className="">
@@ -415,14 +420,14 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
               ))}
             </div> */}
 
-            <hr className="my-2 border-gray-300" />
+            {/* <hr className="my-2 border-gray-300" /> */}
 
             {/* Settings & Theme */}
             <div className="p-4 flex flex-col gap-3">
-              <span className="font-poppins text-sm font-medium">Account</span>
+              {/* <span className="font-poppins text-sm font-medium">Account</span>
               <span className="font-poppins text-sm font-light tracking-wide">
                 Settings
-              </span>
+              </span> */}
 
               <div className="mt-4">
                 <h3 className="font-poppins text-sm font-medium mb-2">Theme</h3>

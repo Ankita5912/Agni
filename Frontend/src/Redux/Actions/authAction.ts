@@ -2,18 +2,11 @@
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 
-// Serializable User Type
-export interface SafeUser {
-  uid: string;
-  email: string | null;
-  displayName: string | null;
-  photoURL?: string | null;
-}
 
 // Action Interfaces
 export interface LoginActionType {
   type: typeof LOGIN;
-  payload: SafeUser;
+  payload: string | null;
 }
 
 export interface LogoutActionType {
@@ -26,9 +19,9 @@ export type AuthActionType = LoginActionType | LogoutActionType;
 
 //  Only store serializable user fields
 
-export const login = (user: SafeUser): LoginActionType => ({
+export const login = (token: string | null): LoginActionType => ({
   type: LOGIN,
-  payload: user,
+  payload: token,
 });
 
 export const logout = (): LogoutActionType => ({

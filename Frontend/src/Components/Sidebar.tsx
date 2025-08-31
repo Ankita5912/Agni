@@ -1,19 +1,33 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { LayoutDashboard, Rocket, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { LayoutDashboard, Rocket, Users, ArrowUpRight, Group, LogOut } from "lucide-react";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import type { JSX } from "react/jsx-runtime";
-
+import type { AppDispatch } from "../Redux/store";
+import { fetchProjects } from "../Redux/Slice/projectSlice";
+import type { ProjectType } from "../Redux/Slice/projectSlice";
+import { fetchTeams, type Team } from "../Redux/Slice/teamSlice";
 
 interface SidebarProp {
   value: boolean;
+  teamFormstatus: () => void;
 }
 
-export default function Sidebar({ value }: SidebarProp) {
+export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
   const mode = useSelector((state: RootState) => state.mode.mode);
   const [openIndex, setOpenIndex] = useState<number | null>(1);
-  const Project = useSelector((state: RootState) => state.Project.projects);
+  const Project = useSelector(
+    (state: RootState) => state.Project.projects
+  ) as ProjectType[];
+  const team = useSelector((state: RootState) => state.team.teams) as Team[];
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchProjects());
+    dispatch(fetchTeams())
+  }, [dispatch]);
 
   const toggleSubitems = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -26,7 +40,6 @@ export default function Sidebar({ value }: SidebarProp) {
 
   interface NavSubItem {
     text: string;
-    isActive: boolean;
     path: string;
     pathExists: boolean;
     subitems: SubItem[];
@@ -38,11 +51,10 @@ export default function Sidebar({ value }: SidebarProp) {
     profile: string;
   }
 
-  const navitems: NavItem = {
-    NavsubItems: [
+  useEffect(() => {
+    setNavsubItems([
       {
         text: "Dashboard",
-        isActive: false,
         path: "/kanban/dashboard",
         pathExists: true,
         subitems: [],
@@ -50,18 +62,51 @@ export default function Sidebar({ value }: SidebarProp) {
       },
       {
         text: "Projects",
-        isActive: false,
         path: "/kanban/project",
         pathExists: false,
         subitems: Project.map((proj) => ({
           heading: proj.heading,
-          path: `/kanban/project/${proj.uuid}`,
+          path: `/kanban/project/${proj._id}`,
         })),
         icon: <Rocket size={16} />,
       },
       {
         text: "Teams",
-        isActive: false,
+        path: "/teams",
+        pathExists: false,
+        subitems: team.map((team) => ({
+          heading: team.teamId,
+          path: `/teams/${team.teamId}`,
+        })),
+        icon: <Users size={16} />,
+      },
+    ]);
+  }, [Project, team]);
+
+  const navitems: NavItem = {
+    NavsubItems: [
+      {
+        text: "Dashboard",
+        path: "/kanban/dashboard",
+        pathExists: true,
+        subitems: team.map((team) => ({
+          heading: team.teamId,
+          path: `/teams/${team.teamId}`,
+        })),
+        icon: <LayoutDashboard size={16} />,
+      },
+      {
+        text: "Projects",
+        path: "/kanban/project",
+        pathExists: false,
+        subitems: Project.map((proj) => ({
+          heading: proj.heading,
+          path: `/kanban/project/${proj._id}`,
+        })),
+        icon: <Rocket size={16} />,
+      },
+      {
+        text: "Teams",
         path: "/teams",
         pathExists: false,
         subitems: [],
@@ -70,6 +115,16 @@ export default function Sidebar({ value }: SidebarProp) {
     ],
     profile: "",
   };
+
+  const projectIcons = [
+    "/projectIcon1.png",
+    "/projectIcon2.png",
+    "/projectIcon3.png",
+    "/projectIcon4.png",
+    "/projectIcon5.png",
+  ];
+  const randomProjectIcons = Math.floor(Math.random() * projectIcons.length);
+  const randomImageUrl = projectIcons[randomProjectIcons];
 
   const [navsubItems, setNavsubItems] = useState<NavSubItem[]>(
     navitems.NavsubItems
@@ -133,7 +188,7 @@ export default function Sidebar({ value }: SidebarProp) {
                         to={sub.path}
                         key={subIdx}
                         className={({ isActive }) =>
-                          `text-sm text-inherit/10 hover:text-[var(--secondary-color)] cursor-pointer ${
+                          `text-sm text-inherit/10 hover:text-[var(--secondary-color)] cursor-pointer flex gap-1 items-center ${
                             isActive
                               ? "text-[color:var(--secondary-color)]"
                               : ""
@@ -143,6 +198,12 @@ export default function Sidebar({ value }: SidebarProp) {
                           isActive ? { color: "var(--secondary-color)" } : {}
                         }
                       >
+                        <span>
+                          <img
+                            src={randomImageUrl}
+                            className="h-5 w-5 rounded-sm"
+                          />
+                        </span>
                         {sub.heading}
                       </NavLink>
                     ))}
@@ -152,6 +213,32 @@ export default function Sidebar({ value }: SidebarProp) {
             )}
           </div>
         ))}
+      </div>
+
+      {/* bottom options */}
+      <div
+        className={`absolute bottom-20 flex-col gap-4  bg-inherit ${
+          mode ? "text-[#444950] font-normal" : "text-inherit "
+        }`}
+      >
+        <div
+          className="flex items-center gap-10 antialiased tracking-wide font-poppins text-sm mb-2 cursor-pointer"
+          onClick={teamFormstatus}
+        >
+          <span className="flex gap-2 items-center">
+            <Group size={16} />
+            {"  "}Create Team{" "}
+          </span>
+          <span>
+            <ArrowUpRight size={16} />
+          </span>
+        </div>
+        <div className="antialiased tracking-wide font-poppins text-sm flex gap-2 items-center cursor-pointer" onClick={()=> localStorage.removeItem('token')}>
+          <span>
+            <LogOut size={16} />
+          </span>
+          Logout <span></span>
+        </div>
       </div>
     </div>
   );
