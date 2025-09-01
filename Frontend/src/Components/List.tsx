@@ -52,7 +52,7 @@ export default function List() {
   const fetchUsers = async () => {
     try {
       const res = await axios(
-        `http://localhost:5000/api/users?search=${inputValueChanging}`,
+        `https://agni-9mw4.onrender.com/api/users?search=${inputValueChanging}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

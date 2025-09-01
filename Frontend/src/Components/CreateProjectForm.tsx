@@ -124,7 +124,6 @@ export default function CreProjectForm() {
             </p>
           )}
         </div>
-
         {/* Start Date */}
         <div>
           <label
@@ -149,7 +148,6 @@ export default function CreProjectForm() {
             </p>
           )}
         </div>
-
         {/* Deadline */}
         <div>
           <label

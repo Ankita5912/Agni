@@ -5,6 +5,7 @@ import Sidebar from "../Components/Sidebar";
 import CreateTeamForm from "./CreateTeamPage";
 import { useSelector } from "react-redux";
 import type { RootState } from "../Redux/Reducers/rootReducer";
+import Loader from "../Components/Loader";
 
 export default function KanbanBoard() {
   const mode = useSelector((state: RootState) => state.mode.mode)
@@ -13,47 +14,52 @@ export default function KanbanBoard() {
   const handleCreateTeamForm = () => {
     setTeamForm(!openTeamForm);
   }
-  
+  const projectState = useSelector((state: RootState) => state.Project.loading);
   return (
-    <div className="w-screen h-screen overflow-hidden flex flex-col">
-      {/* Fixed Navbar */}
-      <Navbar toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
-
-      {/* Grid layout starts below fixed navbar */}
-      <div
-        className={`grid relative  flex-1 mt-14 overflow-hidden ${isSidebarVisible ? "grid-cols-1 md:grid-cols-[16rem_1fr]" : ""
-          }`}
-      >
-        {/* Sidebar */}
+      <div className="w-screen h-screen overflow-hidden flex flex-col">
+        {/* Fixed Navbar */}
+        <Navbar toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
+        {/* Grid layout starts below fixed navbar */}
         <div
-          className={`${isSidebarVisible ? "block md:block md:static" : "hidden"
-            } fixed top-14 left-0 z-40 w-2/3 h-[calc(100vh-4rem)]
+          className={`grid relative  flex-1 md:mt-14 mt-16 overflow-hidden ${isSidebarVisible ? "grid-cols-1 md:grid-cols-[16rem_1fr]" : ""
+            }`}
+        >
+          {/* Sidebar */}
+          <div
+            className={`${isSidebarVisible ? "block md:block md:static" : "hidden"
+              } fixed top-14 left-0 z-40 w-2/3 h-[calc(100vh-4rem)]
              
              md:h-full md:w-full
           `}
-        >
-          <Sidebar value={isSidebarVisible} teamFormstatus={handleCreateTeamForm} />
-        </div>
+          >
+            <Sidebar value={isSidebarVisible} teamFormstatus={handleCreateTeamForm} />
+          </div>
 
-        {
-          openTeamForm && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-              {/* Backdrop */}
-              <div
-                className={`absolute inset-0  ${mode ? "bg-blue-950/30" : "bg-black/60"
-                  }`}
-                onClick={handleCreateTeamForm} // close when clicking backdrop
-              />
-              <CreateTeamForm />
-            </div>
-          )
-        }
+          {
+            openTeamForm && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                {/* Backdrop */}
+                <div
+                  className={`absolute inset-0  ${mode ? "bg-blue-950/30" : "bg-black/60"
+                    }`}
+                  onClick={handleCreateTeamForm} // close when clicking backdrop
+                />
+                <CreateTeamForm />
+              </div>
+            )
+          }
 
-        {/* Main content area — scrollable only */}
-        <div className="h-[calc(100vh-4rem)] overflow-auto w-full ">
-          <Outlet />
-        </div>
+          {/* Main content area — scrollable only */}
+          <div className="h-[calc(100vh-4rem)] overflow-auto w-full ">
+            <Outlet />
+          </div>
       </div>
+      {/* Loader Overlay */}
+      {projectState && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-[9999]">
+          <Loader />
+        </div>
+      )}
     </div>
   );
 }

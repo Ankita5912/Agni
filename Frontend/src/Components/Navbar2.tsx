@@ -77,7 +77,7 @@ export default function Navbar2() {
     Name: "AGNI",
     NavsubItems: [
       { text: "About", isActive: false, path: "/", onhover: false },
-      { text: "Features", isActive: false, path: "/features", onhover: true },
+      { text: "Features", isActive: false, path: "/feature", onhover: true },
       {
         text: "Kanban Board",
         isActive: false,
@@ -152,8 +152,8 @@ export default function Navbar2() {
   const color = mode ? "#444950" : "white";
   return (
     <div
-      className={`flex justify-between items-center h-14 md
-    sm:px-15 sm:pl-5 px-2 fixed top-0 w-full py-3 z-50 border-b  ${mode ? "border-black/20 " : "border-white/25"
+      className={`flex justify-between items-center md:h-14 h-18
+    sm:px-15 sm:pl-5 px-2 fixed top-0 w-full py-3 z-50 border-b  ${mode ? "border-black/20 bg-white" : "border-white/25"
         }`}
     >
       <div className="flex items-center gap-1">
@@ -391,16 +391,32 @@ export default function Navbar2() {
           </div>
         )}
       </div>
-
-      <div className="lg:hidden flex flex-row sm:gap-2 gap-1 items-center">
+       
+      
+      <div className="lg:hidden flex flex-row gap-3 items-center">
+        <div
+          onClick={handleToggle}
+          className={`flex h-8 w-8 mr-2 items-center justify-center rounded-sm lg:hidden cursor-pointer transition-all duration-300 bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)]
+            ${mode ? "" : " "}`}
+        >
+          {mode ? (
+            <Moon strokeWidth={2} size={20} className="" stroke="white" />
+          ) : (
+            <Sun size={20} strokeWidth={2} stroke="white" />
+          )}
+        </div>
         <img
-          src='./profile'
+          src={
+            navitems?.profile
+              ? navitems.profile
+              : './Profile.png'
+          }
           alt="Profile"
-          className="md:w-8 md:h-8 sm:h-7 sm:w-7 w-7 h-7 rounded-full"
+          className="h-8 w-8 rounded-full"
         />
 
         <div className="">
-          <EllipsisVertical size={22} onClick={() => setMobileMenu(true)} />
+          <EllipsisVertical size={23} onClick={() => setMobileMenu(true)} />
         </div>
       </div>
 
@@ -418,7 +434,7 @@ export default function Navbar2() {
               } ${mode ? "bg-white text-inherit" : "bg-black text-inherit"}`}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-300">
+            <div className="flex items-center justify-between p-5.5 border-b border-gray-300">
               <h2 className="text-lg font-semibold font-poppins">Menu</h2>
               <button onClick={() => setMobileMenu(false)}>
                 <span className="text-xl font-bold">&times;</span>
@@ -435,7 +451,7 @@ export default function Navbar2() {
                     handleLink(index);
                     setMobileMenu(false);
                   }}
-                  className={`font-poppins text-sm font-light tracking-wide transition-all duration-150 ${item.isActive
+                  className={`font-poppins text-base tracking-wide transition-all duration-150 ${item.isActive
                       ? "text-[var(--primary-color)] font-semibold"
                       : ""
                     }`}

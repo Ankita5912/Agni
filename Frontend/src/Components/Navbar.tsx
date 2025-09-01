@@ -140,9 +140,8 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
   return (
     <div
-      className={`flex justify-between items-center h-14 md
-    sm:px-6 px-2 fixed top-0 w-full py-3 z-50 border-b  ${
-      mode ? "border-black/20" : "border-white/25"
+      className={`flex justify-between items-center md:h-14 h-16 sm:px-6 px-2 fixed top-0 w-full py-3 z-50 border-b  ${
+      mode ? "border-black/20 bg-white" : "border-white/25"
     }`}
     >
       <div className="flex items-center sm:gap-4 gap-1">
@@ -179,13 +178,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
       <div className="flex flex-row items-center place-content-center sm:gap-4 gap-2">
         <div
-          className={`xl:w-md sm:w-xs w-32 py-1 px-2.5 pl-3 rounded-sm sm:h-9 h-6 flex  items-center ${
+          className={`xl:w-md sm:w-xs w-32 py-1  md:px-2.5 px-1 md:pl-3 pl-2 rounded-sm sm:h-9 h-8 flex  items-center ${
             mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
           }`}
         >
           <input
             type="text"
-            className="w-full outline-none h-full tracking-wide font-poppins sm:text-sm text-xs font-light placeholder:text-inherit/10 placeholder:text-3sm"
+            className="w-full outline-none  tracking-wide font-poppins sm:text-sm text-xs font-light placeholder:text-inherit/10 placeholder:text-3sm"
             placeholder="Projects, subtasks , teams and so on"
             name="search"
             value={inputChange.inputValue}
