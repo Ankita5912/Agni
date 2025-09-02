@@ -52,12 +52,14 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
         return;
       }
 
-      // Store token + update Redux
       dispatch(login(result.data.token));
+
+      // Save token (synchronously)
       localStorage.setItem("token", result.data.token);
 
       toast.success("Login successful");
       navigate("/kanban", { replace: true });
+      
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Login failed");

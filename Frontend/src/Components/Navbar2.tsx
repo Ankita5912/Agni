@@ -152,8 +152,8 @@ export default function Navbar2() {
   const color = mode ? "#444950" : "white";
   return (
     <div
-      className={`flex justify-between items-center md:h-14 h-18
-    sm:px-15 sm:pl-5 px-2 fixed top-0 w-full py-3 z-50 border-b  ${mode ? "border-black/20 bg-white" : "border-white/25"
+      className={`flex justify-between items-center md:h-15 h-18
+    sm:px-15 sm:pl-5 px-2 fixed top-0 w-full py-3 z-50 border-b backdrop-blur-md ${mode ? "border-black/20" : "border-white/25 " 
         }`}
     >
       <div className="flex items-center gap-1">
@@ -263,14 +263,14 @@ export default function Navbar2() {
 
             {/* LOGIN BACKDROP */}
             {showLoginPage && (
-              <div className="fixed inset-0 z-50">
+              <div className="fixed inset-0 z-50 h-screen w-screen">
                 <div
-                  className={`fixed inset-0 bg-black/5 backdrop-blur-none`}
+                  className={`fixed inset-0 ${mode ? "bg-blue-950/30" : "bg-black/60"
+                    } backdrop-blur-none h-screen w-screen`}
                   onClick={() => setShowPage(false)}
                 ></div>
                 <div
-                  className={`flex items-center justify-center h-full ${mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
-                    }`}
+                  className={`flex items-center justify-center h-full `}
                 >
                   <Login
                     signUpPage={(value) => {
@@ -285,13 +285,13 @@ export default function Navbar2() {
 
             {/* SIGNUP BACKDROP */}
             {showSignupPage && (
-              <div className="fixed inset-0 z-50">
+              <div className="fixed inset-0 z-50 h-screen">
                 <div
-                  className="fixed inset-0 bg-black/5 backdrop-blur-none"
+                  className="fixed inset-0 h-screen backdrop-blur-none"
                   onClick={() => setSignupPage(false)}
                 ></div>
                 <div
-                  className={`flex items-center justify-center h-full shadow-2xl ${mode ? "bg-[#0b090963]" : "bg-[#2a292994]"
+                  className={`flex items-center justify-center h-full shadow-2xl ${mode ? "bg-blue-950/30" : "bg-black/60"
                     }`}
                 >
                   <SignUp
@@ -339,7 +339,7 @@ export default function Navbar2() {
                   </span>
                 </div> */}
                   <div className="flex gap-4 items-center">
-                    <img src={user.avatarUrl} alt="profile" className="h-10 w-10 rounded-full" />
+                    <img src={user?.avatarUrl} alt="profile" className="h-10 w-10 rounded-full" />
                     <span className="tracking-wide font-poppins text-lg antialiased">
                       {user.name}
                     </span>
