@@ -51,7 +51,7 @@ export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
     profile: string;
   }
 
-  const token = localStorage.getItem('token')
+
   useEffect(() => {
     setNavsubItems([
       {
@@ -82,7 +82,7 @@ export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
         icon: <Users size={16} />,
       },
     ]);
-  }, [Project, team, token]);
+  }, [Project, team]);
 
   const navitems: NavItem = {
     NavsubItems: [
