@@ -38,7 +38,7 @@ export default function HomePage() {
   return (
     <div className="relative overflow-x-hidden overflow-y-auto" style={{ scrollbarWidth: "none", scrollbarGutter: "0px" }}>
       <Navbar2 />
-      <main className="flex flex-col w-full items-center justify-center xl:px-auto md:px-18 sm:px-15 px-10">
+      <main className="flex flex-col w-full items-center justify-center xl:px-auto md:px-18 sm:px-15 px-8">
         <div className="relative max-w-4xl w-full text-center sm:mt-32 mt-38">
           <h1
             className={`sm:text-6xl/tight text-5xl  sm:font-extrabold font-bold font-josphin mb-6 ${mode ? 'text-[#24223e]' : 'text-white'}`}
@@ -112,7 +112,7 @@ export default function HomePage() {
       </section>
 
       {/* How To Use Section */}
-      <section className="py-16 md:px-30 px-10 flex xl:flex-row justify-center place-items-center flex-col xl:justify-between gap-6">
+      <section className="py-16 md:px-30 px-6 flex xl:flex-row justify-center place-items-center flex-col xl:justify-between gap-6">
         <img src="./flowWithAgni.gif" alt="AgniVedio" className={`w-xl border rounded-2xl ${mode ? " border-gray-200" : " border-gray-800"
       }`}/>
         <div className={`font-normal font-poppins ${mode ? " text-[#444950]" : "text-inherit"}`}>

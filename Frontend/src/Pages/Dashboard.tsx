@@ -58,8 +58,6 @@ export default function ProjectDashboard() {
       { name: "On Hold", value: statusCounts.onhold}
     ];
   };
-
-
   
   const projectStatusData = StatusCounts();
 

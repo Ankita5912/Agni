@@ -423,14 +423,14 @@ export default function Navbar2() {
       {MobileMenu ? (
         <>
           <div
-            className={`fixed inset-0 z-40 ${mode ? " bg-black/5" : "bg-white/10"
+            className={`fixed inset-0 z-50 ${mode ? " bg-black/5" : "bg-white/10"
               }`}
             onClick={() => setMobileMenu(false)}
           />
 
           {/* Mobile Drawer */}
           <div
-            className={`fixed top-0 right-0 z-50 h-full w-3/4 sm:w-1/2 md:w-1/3   shadow-lg transform transition-transform duration-300 ease-in-out ${MobileMenu ? "translate-x-0" : "translate-x-full"
+            className={`fixed top-0 right-0 z-50 h-screen w-3/4 sm:w-1/2 md:w-1/3   shadow-lg transform transition-transform duration-300 ease-in-out ${MobileMenu ? "translate-x-0" : "translate-x-full"
               } ${mode ? "bg-white text-inherit" : "bg-black text-inherit"}`}
           >
             {/* Header */}

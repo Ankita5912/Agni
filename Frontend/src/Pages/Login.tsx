@@ -53,10 +53,9 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
       }
 
       dispatch(login(result.data.token));
-
+      
       // Save token (synchronously)
       localStorage.setItem("token", result.data.token);
-
       toast.success("Login successful");
       navigate("/kanban", { replace: true });
       
