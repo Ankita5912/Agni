@@ -22,12 +22,12 @@ function CardContent({ children, className = "" }: { children: React.ReactNode; 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   const mode = useSelector((state: RootState) => state.mode.mode);
   return (
-    <Card className={` shadow-[0_25px_50px_-12px_var(--primary-color)] border ${mode ? "bg-white/70 border-gray-200" : "bg-[#1a1b1e]/60 border-gray-800"
+    <Card className={` shadow-[0_25px_50px_-12px_var(--primary-color)] border  ${mode ? "bg-white/70 border-gray-200" : "bg-[#1a1b1e]/60 border-gray-800"
       }`}>
       <CardContent className="p-5 w-full h-48 flex gap-3  justify-center flex-col items-center">
         {icon}
         <h4 className={`mt-3 font-serif font-bold `}>{title}</h4>
-        <p className={`text-sm  text-center font-Manrope tracking-wide font-normal antialiased ${mode ? "text-[#444950]" : "text-inherit"}`}>{description}</p>
+        <p className={`text-sm  text-center font-Manrope tracking-wide font-normal antialiased ${mode ? "text-[#444950]" : "text-[#676e78]"}`}>{description}</p>
       </CardContent>
     </Card>
   )
@@ -38,10 +38,10 @@ export default function HomePage() {
   return (
     <div className="relative overflow-x-hidden overflow-y-auto" style={{ scrollbarWidth: "none", scrollbarGutter: "0px" }}>
       <Navbar2 />
-      <main className="flex flex-col w-full items-center justify-center px-3">
+      <main className="flex flex-col w-full items-center justify-center xl:px-auto md:px-18 sm:px-15 px-10">
         <div className="relative max-w-4xl w-full text-center sm:mt-32 mt-38">
           <h1
-            className={`sm:text-6xl/tight text-5xl sm:font-extrabold font-bold font-josphin mb-6 ${mode ? 'text-[#24223e]' : 'text-white'}`}
+            className={`sm:text-6xl/tight text-5xl  sm:font-extrabold font-bold font-josphin mb-6 ${mode ? 'text-[#24223e]' : 'text-white'}`}
           >
             <span className="font-normal tracking-tighter z-20">
               Welcome to your Kanban Board
@@ -66,7 +66,7 @@ export default function HomePage() {
           </button>
 
           <h1
-            className={`sm:text-base text-sm sm:font-bold font-semibold font-Manrope  mt-6 ${mode ? "text-[#444950]" : "text-inherit"
+            className={`sm:text-base text-sm sm:font-bold font-semibold font-Manrope  mt-6 ${mode ? "" : "text-inherit"
               }`}
           >
             Manage Your Projects the Agile Way — Seamlessly
@@ -77,15 +77,15 @@ export default function HomePage() {
 
         </div>
         <section className="flex items-center justify-center max-w-4xl  md:mt-15 mt-10 ">
-          <img src="./Kanban.png" alt="agni" className={`shadow-[-2px_-2px_20px_var(--primary-color),2px_-2px_20px_var(--primary-color)]  border border-0.5 rounded-2xl  ${mode ? "border-[#f8f9fabe]" : "border-[#242528]"
+          <img src="./Kanban.png" alt="agni" className={`shadow-[-2px_-2px_20px_var(--primary-color),2px_-2px_20px_var(--primary-color)] border border-0.5 rounded-2xl   ${mode ? "border-[#f8f9fabe]" : "border-[#242528]"
             }`} />
         </section>
         
       </main>
-      <section className="py-16 px-20  md:mt-10 mt-10">
+      <section className="py-16 md:px-20 px-10 md:mt-10 mt-10">
         <div className="mb-10 flex flex-col gap-3">
-          <h3 className={`text-4xl font-semibold font-poppins text-center ${mode ? 'text-[#24223e]' : ''}`}>Plan Smarter, Work Faster, Deliver Better</h3>
-          <p className={`text-lg font-semibold font-Manrope text-center  ${mode ? "text-[#444950]" : "text-inherit"}`}>Keep projects on track with powerful planning tools</p>
+          <h3 className={`md:text-4xl text-3xl font-semibold font-poppins text-center ${mode ? 'text-[#24223e]' : ''}`}>Plan Smarter, Work Faster, Deliver Better</h3>
+          <p className={`md:text-lg text-base font-Manrope text-center  ${mode ? "text-[#444950] ont-semibold" : "text-[#676e78]  font-medium"}`}>Keep projects on track with powerful planning tools</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
           <FeatureCard
@@ -112,8 +112,8 @@ export default function HomePage() {
       </section>
 
       {/* How To Use Section */}
-      <section className="py-16 px-30 flex flex-row justify-between">
-        <img src="./flowWithAgni.gif" alt="AgniVedio" className={`w-xl border  rounded-2xl ${mode ? " border-gray-200" : " border-gray-800"
+      <section className="py-16 md:px-30 px-10 flex xl:flex-row justify-center place-items-center flex-col xl:justify-between gap-6">
+        <img src="./flowWithAgni.gif" alt="AgniVedio" className={`w-xl border rounded-2xl ${mode ? " border-gray-200" : " border-gray-800"
       }`}/>
         <div className={`font-normal font-poppins ${mode ? " text-[#444950]" : "text-inherit"}`}>
           <h3 className={`text-2xl font-bold mb-10 ${mode ? 'text-[#24223e]' : ''}`}>How to Use Agni</h3>
@@ -144,7 +144,7 @@ export default function HomePage() {
                 <div className={`flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${mode ? 'bg-indigo-100' :'bg-indigo-900'}`}>
                   <Brain className={`w-6 h-6  dark: ${mode ? 'text-indigo-600' : 'text-indigo-300'}`} />
                 </div>
-                <h4 className={`text-lg font-roboto font-semibold mb-2 ${mode ? 'text-gray-900' : 'text-white'}`}>
+                <h4 className={`text-lg font-roboto  mb-2 ${mode ? 'text-gray-900 font-semibold' : 'text-white/80 tracking-wider font-normal'}`}>
                   AI Integration
                 </h4>
               </div>
@@ -158,13 +158,13 @@ export default function HomePage() {
           </Card>
 
           {/* Sprints */}
-          <Card className={`border  rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-3xl ${mode ?'border-gray-200':''}`}>
+          <Card className={`border  rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 backdrop-blur-3xl ${mode ?'border-gray-200':''}`}>
             <CardContent className="p-6 flex flex-col items-start">
               <div className="flex gap-2 items-center">
                 <div className={`flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${mode ? 'bg-indigo-100' : 'bg-indigo-900'}`}>
                   <Timer className={`w-6 h-6  dark: ${mode ? 'text-indigo-600' : 'text-indigo-300'}`} />
                 </div>
-                <h4 className={`text-lg font-roboto font-semibold mb-2 ${mode ? 'text-gray-900' : 'text-white'}`}>
+                <h4 className={`text-lg font-roboto mb-2  ${mode ? 'text-gray-900 font-semibold' : 'text-white/80 tracking-wider font-normal'}`}>
                   Sprints
                 </h4>
               </div>
