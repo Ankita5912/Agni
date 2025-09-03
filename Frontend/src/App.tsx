@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "./Redux/Reducers/rootReducer";
 import Subtask from "./Components/SubtaskDashboard";
 import HomePage from "./Pages/Home";
@@ -15,22 +15,19 @@ import ProtectedRoute from "./ProtectedRoute";
 import CreateTeamForm from "./Pages/CreateTeamPage";
 import LoginPage from "./Pages/LoginPage";
 
-
 function App() {
   const mode = useSelector((state: RootState) => state.mode.mode);
-  
- 
+
+
   return (
     <BrowserRouter>
       <div
-        className={`min-h-screen ${
-          mode ? "bg-white text-black/85" : "bg-[#1F1F21] text-white/90"
-        }`}
+        className={`min-h-screen ${mode ? "bg-white text-black/85" : "bg-[#1F1F21] text-white/90"
+          }`}
       >
-      
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/create-project"
             element={
@@ -43,7 +40,7 @@ function App() {
             path="/create/team"
             element={
               <ProtectedRoute>
-                <CreateTeamForm/>
+                <CreateTeamForm />
               </ProtectedRoute>
             }
           />

@@ -144,8 +144,10 @@ export default function Navbar2() {
     root.style.setProperty("--secondary-color", theme.secondaryColor);
     root.style.setProperty("--text-color", theme.textColor);
   }, [theme]);
+
    useEffect(() => {
-    dispatch(fetchUser());
+    const user = dispatch(fetchUser());
+    console.log(user)
    }, [])
   
   const [MobileMenu, setMobileMenu] = useState<boolean>(false);
@@ -339,7 +341,9 @@ export default function Navbar2() {
                   </span>
                 </div> */}
                   <div className="flex gap-4 items-center">
-                    <img src={user?.avatarUrl} alt="profile" className="h-10 w-10 rounded-full" />
+                    <img src={navitems?.profile
+                      ? navitems.profile
+                      : './Profile.png'} alt="profile" className="h-10 w-10 rounded-full" />
                     <span className="tracking-wide font-poppins text-lg antialiased">
                       {user.name}
                     </span>
