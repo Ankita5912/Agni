@@ -121,7 +121,6 @@ export default function SignUp({ loginPage, signUpPage }: SignUpProps) {
             }`}
             {...register("password")}
             placeholder="Password"
-            autocomplete="new-password" 
           />
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
