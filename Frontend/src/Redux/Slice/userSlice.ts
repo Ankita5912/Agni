@@ -14,30 +14,30 @@ export interface User {
 };
 
 interface UserState {
-  user: User;
+  user: User | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
-  user: null as unknown as User,
+  user: null,
   loading: false,
   error: null,
 };
 
-const token = localStorage.getItem('token')
 
 // fetch user,
-export const fetchUser = createAsyncThunk<User>(
+export const fetchUser = createAsyncThunk<User, string>(
   "user/fetchUser",
-  async (_, thunkAPI) => {
+  async (token , thunkAPI) => {
     try {
       const res = await axios.get("https://agni-9mw4.onrender.com/api/users/user",{
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    });
+      });
       return res.data.user; // return single user object
+      
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       return thunkAPI.rejectWithValue(
@@ -67,8 +67,4 @@ const userSlice = createSlice({
 
   }
 })
-
 export default userSlice.reducer;
-
-
-

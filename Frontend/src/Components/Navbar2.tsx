@@ -30,8 +30,8 @@ import Button from "./Button";
 import Feature from "./Feature";
 import LogoA from "./Logo";
 import toast from "react-hot-toast";
-import { logout } from "../Redux/Actions/authAction";
 import { fetchUser } from "../Redux/Slice/userSlice";
+import { login, logout } from "../Redux/Actions/authAction";
 export default function Navbar2() {
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +39,6 @@ export default function Navbar2() {
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((state: RootState) => state.user.user);
   const theme = useSelector((state: RootState) => state.theme);
-  const token = localStorage.getItem('token')
   const [notification, setNotification] = useState<boolean>(false);
   const [profileOption, setprofileOption] = useState<boolean>(false);
 
@@ -68,7 +67,7 @@ export default function Navbar2() {
     img: string;
     Name: string;
     NavsubItems: NavSubItem[];
-    profile: string | null;
+    profile: string | undefined;
   }
 
   //Object containing navitem
@@ -90,13 +89,10 @@ export default function Navbar2() {
   };
   //destructuring some keys from object Navitems
   const { Name } = navitems;
-
   const [navsubItems, setNavsubItems] = useState<NavSubItem[]>(
     navitems.NavsubItems
   );
-
   const [showLoginPage, setShowPage] = useState<boolean>(false);
-
   const [showSignupPage, setSignupPage] = useState<boolean>(false);
 
   //function to change the color of nav bar items when particular link is open according to theme color
@@ -144,12 +140,16 @@ export default function Navbar2() {
     root.style.setProperty("--secondary-color", theme.secondaryColor);
     root.style.setProperty("--text-color", theme.textColor);
   }, [theme]);
+    
+  const token = localStorage.getItem("token");
+  // Sync token to redux store on mount
+  useEffect(() => {
+    if (token) {
+      dispatch(login(token));
+      dispatch(fetchUser(token));
+    }
+  }, [dispatch, token]);
 
-   useEffect(() => {
-    const user = dispatch(fetchUser());
-    console.log(user)
-   }, [])
-  
   const [MobileMenu, setMobileMenu] = useState<boolean>(false);
   const color = mode ? "#444950" : "white";
   return (
@@ -243,7 +243,7 @@ export default function Navbar2() {
           )}
         </div>
 
-        <div
+        {token && <div
           className="lg:flex hidden"
           onMouseEnter={() => {
             setNotification(true);
@@ -254,7 +254,7 @@ export default function Navbar2() {
         >
           <Bell strokeWidth={2} size={20} stroke={color} />
           {notification ? <Notification /> : <></>}
-        </div>
+        </div>}
 
         {/*profile option*/}
         {token === null ? (
@@ -323,7 +323,7 @@ export default function Navbar2() {
             />
             {profileOption ? (
               <div
-                className={`fixed right-5 top-14 rounded-md bg-inherit w-fit p-6 flex flex-col gap-2 border  text-inherit ${mode
+                className={`fixed right-5 top-14 rounded-md  w-fit p-6 flex flex-col gap-2 border  text-inherit ${mode
                     ? "border-black/20 bg-[#f8f9fa]"
                     : "border-white/25 bg-[#242528]"
                   }`}
@@ -345,7 +345,7 @@ export default function Navbar2() {
                       ? navitems.profile
                       : './Profile.png'} alt="profile" className="h-10 w-10 rounded-full" />
                     <span className="tracking-wide font-poppins text-lg antialiased">
-                      {user.name}
+                      {user?.name}
                     </span>
                   </div>
                   <hr className="text-gray-300" />

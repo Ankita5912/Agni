@@ -5,8 +5,6 @@ interface stateType{
   token: string | null;
 }
 
-const token = localStorage.getItem('token')
-
 const initialState: stateType = {
   token : null,
 }
@@ -14,7 +12,7 @@ const initialState: stateType = {
 export const authReducer = (state: stateType = initialState, action: AuthActionType): stateType => {
   switch (action.type) {
     case LOGIN:
-      return { ...state, token: token }
+      return { ...state, token: action.payload }
     case LOGOUT:
       return { ...state, token: null }
     default:

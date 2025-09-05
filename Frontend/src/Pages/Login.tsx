@@ -32,7 +32,7 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SchemaType>({
     resolver: zodResolver(schema),
   });
@@ -45,20 +45,15 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
         email: data.email,
         password: data.password,
       });
-
       // Ensure response contains token
       if (!result.data?.token) {
         toast.error("Login failed. No token received.");
         return;
       }
-
-      dispatch(login(result.data.token));
-      
-      // Save token (synchronously)
+      dispatch(login(result.data.token)); 
       localStorage.setItem("token", result.data.token);
       toast.success("Login successful");
       navigate("/kanban", { replace: true });
-      
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Login failed");
@@ -110,6 +105,7 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
               }`}
             placeholder="Password"
             {...register("password")}
+            autoComplete="current-password"
           />
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -120,8 +116,9 @@ export default function Login({ loginPage, signUpPage }: LoginProps) {
         <button
           type="submit"
           className="bg-gradient-to-br from-[var(--primary-color)] to-[var(--secondary-color)] text-white py-2 rounded hover:bg-blue-600"
+          disabled={isSubmitting}
         >
-          Login
+          {isSubmitting ? 'Submitting ...':'Login'}
         </button>
       </form>
 

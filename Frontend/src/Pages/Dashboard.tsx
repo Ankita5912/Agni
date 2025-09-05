@@ -6,13 +6,12 @@ import type { RootState } from "../Redux/Reducers/rootReducer";
 import { useMemo, useState } from "react";
 import ProjectUpdateForm from "./ProjectUpdate";
 
-
 export default function ProjectDashboard() {
-
   const Project = useSelector((state: RootState) => state.Project.projects);
   const mode = useSelector((state: RootState) => state.mode.mode);
   const [showUpdateForm, setshowForm] = useState<boolean>(false);
   const [activeProjectID, setActiveProjctId] = useState<string>("");
+
   const ProStartEnd = useMemo(() => {
     return Project.map(({ heading, startDate, deadline }) => ({
       heading,
@@ -21,13 +20,53 @@ export default function ProjectDashboard() {
     }));
   }, [Project]);
 
-  const StatusCounts = () => {
+  //this should be used inside the useMemo because when dashboard is rendered again from subtask dashboard it is again calculated which is a expensive calculation
+  // const StatusCounts = () => {
+  //   const statusCounts = {
+  //     todo: 0,
+  //     inProgress: 0,
+  //     review: 0,
+  //     completed: 0,
+  //     onhold : 0
+  //   };
+
+    
+  //   for (const project of Project) {
+  //     switch (project.status) {
+  //       case "To Do":
+  //         statusCounts.todo++;
+  //         break;
+  //       case "In Progress":
+  //         statusCounts.inProgress++;
+  //         break;
+  //       case "Review":
+  //         statusCounts.review++;
+  //         break;
+  //       case "Completed":
+  //         statusCounts.completed++;
+  //         break;
+  //       case "On Hold":
+  //         statusCounts.onhold++
+  //         break;
+  //     }
+  //   }
+  //   return [
+  //     { name: "To Do", value: statusCounts.todo },
+  //     { name: "In Progress", value: statusCounts.inProgress },
+  //     { name: "Review", value: statusCounts.review },
+  //     { name: "Completed", value: statusCounts.completed },
+  //     { name: "On Hold", value: statusCounts.onhold}
+  //   ];
+  // };
+  // const projectStatusData = StatusCounts();
+
+  const projectStatusData = useMemo(() => {
     const statusCounts = {
       todo: 0,
       inProgress: 0,
       review: 0,
       completed: 0,
-      onhold : 0
+      onhold: 0,
     };
 
     for (const project of Project) {
@@ -45,7 +84,7 @@ export default function ProjectDashboard() {
           statusCounts.completed++;
           break;
         case "On Hold":
-          statusCounts.onhold++
+          statusCounts.onhold++;
           break;
       }
     }
@@ -55,11 +94,9 @@ export default function ProjectDashboard() {
       { name: "In Progress", value: statusCounts.inProgress },
       { name: "Review", value: statusCounts.review },
       { name: "Completed", value: statusCounts.completed },
-      { name: "On Hold", value: statusCounts.onhold}
+      { name: "On Hold", value: statusCounts.onhold },
     ];
-  };
-  
-  const projectStatusData = StatusCounts();
+  }, [Project]);
 
   const handleForm = () => {
     setshowForm(!showUpdateForm)

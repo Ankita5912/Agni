@@ -22,14 +22,14 @@ const initialState: TeamState = {
   error: null,
 };
 
-const token = localStorage.getItem('token')
+const tokenfromLocalStorage = localStorage.getItem('token')
 
 // -------------------- Async Thunks --------------------
 
 // Create Team,
-export const createTeam = createAsyncThunk<Team, Omit<Team, "_id">>(
+export const createTeam = createAsyncThunk<Team, { teamData: Omit<Team, "_id">; token: string |null }  >(
   "teams/createTeam",
-  async (teamData, thunkAPI) => {
+  async ({ teamData, token }, thunkAPI) => {
     try {
       const res = await axios.post("https://agni-9mw4.onrender.com/api/teams", teamData,{
       headers: {
@@ -47,9 +47,9 @@ export const createTeam = createAsyncThunk<Team, Omit<Team, "_id">>(
 );
 
 // Fetch Teams
-export const fetchTeams = createAsyncThunk<Team[]>(
+export const fetchTeams = createAsyncThunk<Team[], string>(
   "teams/fetchTeams",
-  async (_, thunkAPI) => {
+  async (token, thunkAPI) => {
     try {
       const res = await axios.get("https://agni-9mw4.onrender.com/api/teams",{
       headers: {
@@ -65,6 +65,7 @@ export const fetchTeams = createAsyncThunk<Team[]>(
     }
   }
 );
+
 // Delete Team
 export const deleteTeam = createAsyncThunk(
   "team/deleteTeam",
@@ -72,7 +73,7 @@ export const deleteTeam = createAsyncThunk(
     try {
       await axios.delete(`https://agni-9mw4.onrender.com/api/teams/${teamId}`,{
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${tokenfromLocalStorage}`
       }
     });
       return teamId; // return deleted team id

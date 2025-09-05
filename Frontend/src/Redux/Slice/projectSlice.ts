@@ -1,7 +1,9 @@
+// src/redux/projectSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { AxiosError } from "axios";
+import type { RootState } from "../Reducers/rootReducer";
 
 // Project Interface
 export interface ProjectType {
@@ -27,20 +29,18 @@ const initialState: ProjectState = {
   error: null,
 };
 
-const token = localStorage.getItem("token");
-
 // ------------------ Async Thunks ------------------ //
 
-// Fetch All
+// ✅ Fetch All Projects
 export const fetchProjects = createAsyncThunk<
   ProjectType[],
-  void,
+  string,
   { rejectValue: string }
->("projects/fetchAll", async (_, thunkAPI) => {
+>("projects/fetchAll", async (token, thunkAPI) => {
   try {
     const res = await axios.get("https://agni-9mw4.onrender.com/api/projects", {
       headers: {
-        Authorization : `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return res.data.projects;
@@ -52,43 +52,51 @@ export const fetchProjects = createAsyncThunk<
   }
 });
 
-// Create
+// ✅ Create Project
 export const createProject = createAsyncThunk<
   ProjectType,
-  Omit<ProjectType, "_id">
+  Omit<ProjectType, "_id">,
+  { state: RootState; rejectValue: string }
 >("projects/create", async (project, thunkAPI) => {
+  const token = thunkAPI.getState().auth.token;
   try {
-    const res = await axios.post("https://agni-9mw4.onrender.com/api/projects",  project , {
-      headers: {
-        'Authorization': `Bearer ${token}`
+    const res = await axios.post(
+      "https://agni-9mw4.onrender.com/api/projects",
+      project,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    });
+    );
     return res.data.project;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to fetch projects"
+      error.response?.data?.message || "Failed to create project"
     );
   }
 });
 
-// Update
+// ✅ Update Project
 export const updateProject = createAsyncThunk<
   ProjectType,
-  { uuid: string; updates: Partial<Omit<ProjectType, "_id">> }
+  { uuid: string; updates: Partial<Omit<ProjectType, "_id">> },
+  { state: RootState; rejectValue: string }
 >("projects/update", async ({ uuid, updates }, thunkAPI) => {
+  const token = thunkAPI.getState().auth.token;
   try {
     const res = await axios.patch(
       `https://agni-9mw4.onrender.com/api/projects/${uuid}`,
-      updates, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      updates,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    }
     );
     return res.data.project;
   } catch (err) {
-    console.log(err)
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
       error.response?.data?.message || "Failed to update project"
@@ -96,23 +104,24 @@ export const updateProject = createAsyncThunk<
   }
 });
 
-// Delete
+// ✅ Delete Project
 export const deleteProject = createAsyncThunk<
   string,
   string,
-  { rejectValue: string }
+  { state: RootState; rejectValue: string }
 >("projects/delete", async (uuid, thunkAPI) => {
+  const token = thunkAPI.getState().auth.token;
   try {
     await axios.delete(`https://agni-9mw4.onrender.com/api/projects/${uuid}`, {
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
-    return uuid; // return only id to remove from state
+    return uuid;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to fetch projects"
+      error.response?.data?.message || "Failed to delete project"
     );
   }
 });
@@ -157,11 +166,11 @@ const projectSlice = createSlice({
           (p) => p._id === action.payload._id
         );
         if (index !== -1) {
-        state.projects[index] = {
-          ...state.projects[index],
-          ...action.payload,
-        };
-      }
+          state.projects[index] = {
+            ...state.projects[index],
+            ...action.payload,
+          };
+        }
       }
     );
 
@@ -169,9 +178,7 @@ const projectSlice = createSlice({
     builder.addCase(
       deleteProject.fulfilled,
       (state, action: PayloadAction<string>) => {
-        state.projects = state.projects.filter(
-          (p) => p._id !== action.payload
-        );
+        state.projects = state.projects.filter((p) => p._id !== action.payload);
       }
     );
   },

@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { darkMode, lightMode } from "../Redux/Actions/modeActions";
 import type { RootState } from "../Redux/Reducers/rootReducer";
 import type { AppDispatch } from "../Redux/store";
-import { logout } from "../Redux/Actions/authAction";
+import { login, logout } from "../Redux/Actions/authAction";
 import {
   blueTheme,
   orangeTheme,
@@ -29,8 +29,8 @@ import Login from "../Pages/Login";
 import SignUp from "../Pages/SignUp";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { fetchUser } from "../Redux/Slice/userSlice";
-
 type NavbarProps = {
   toggleSidebar: () => void;
 };
@@ -40,9 +40,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
   const mode = useSelector((state: RootState) => state.mode.mode);
   const dispatch = useDispatch<AppDispatch>();
-
   const theme = useSelector((state: RootState) => state.theme);
-  const token = localStorage.getItem('token')
   const [notification, setNotification] = useState<boolean>(false);
   const [profileOption, setprofileOption] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -68,7 +66,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   interface NavItem {
     Name: string;
     NavsubItems: NavSubItem[];
-    profile: string;
+    profile: string | undefined;
   }
   const user = useSelector((state: RootState) => state.user.user);
   //Object containing navitem
@@ -83,7 +81,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     profile: user?.avatarUrl,
   };
   const [showLoginPage, setShowPage] = useState<boolean>(false);
-
   const [showSignupPage, setSignupPage] = useState<boolean>(false);
 
   //function to change the color of nav bar items when particular link is open according to theme color
@@ -94,7 +91,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   //   }));
   //   setNavsubItems(updated);
   // };
-
   //changing the theme using the actions defined in the themeAction according to the input enter by the user if that matches with the themecolor
   const handleTheme = (themecolor: string) => {
     if (themecolor === "orange") {
@@ -107,7 +103,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       dispatch(grayTheme());
     }
   };
-
   //useEffect hook to track the mouse event to close the options under profile when profileOtions are true
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -123,9 +118,16 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     }
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [profileOption]);
+  //dispatching the token in redux because onreloading the redux state get empty 
+  //dispatching the fetchuser API because after login it is navigating to the Kanban board so the token is null in home so fetchUser will not be called there so fetchuser API is called to store user in redux
+  const token = localStorage.getItem('token');
   useEffect(() => {
-    dispatch(fetchUser());
-  }, []);
+    if (token) {
+      dispatch(login(token))
+      dispatch(fetchUser(token))
+    }
+  }, [token]);
+
   //dynamically changing the color mention in the index.css file to change it according to the theme colors store in redux store that are changing acc to user input
   useEffect(() => {
     const root = document.documentElement;
@@ -136,13 +138,10 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
   const [MobileMenu, setMobileMenu] = useState<boolean>(false);
   const color = mode ? '#444950' : 'white';
-  
-
   return (
     <div
-      className={`flex justify-between items-center md:h-14 h-16 sm:px-6 px-2 fixed top-0 w-full py-3 z-50 border-b  ${
-      mode ? "border-black/20 bg-white" : "border-white/25"
-    }`}
+      className={`flex justify-between items-center md:h-14 h-16 sm:px-6 px-2 fixed top-0 w-full py-3 z-50 border-b  ${mode ? "border-black/20 bg-white" : "border-white/25"
+        }`}
     >
       <div className="flex items-center sm:gap-4 gap-1">
         <div className="flex items-center gap-1" onClick={() => navigate("/")}>
@@ -157,7 +156,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
           />
         </div>
       </div>
-
       {/* <div
         className="lg:flex xl
       :gap-6 gap-5 hidden"
@@ -178,14 +176,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
       <div className="flex flex-row items-center place-content-center sm:gap-4 gap-2">
         <div
-          className={`xl:w-md sm:w-xs w-32 py-1  md:px-2.5 px-1 md:pl-3 pl-2 rounded-sm sm:h-9 h-8 flex  items-center ${
-            mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
-          }`}
+          className={`xl:w-md sm:w-xs w-32 py-1  md:px-2.5 px-1 md:pl-3 pl-2 rounded-sm sm:h-9 h-8 flex  items-center ${mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
+            }`}
         >
           <input
             type="text"
             className="w-full outline-none  tracking-wide font-poppins sm:text-sm text-xs font-light placeholder:text-inherit/10 placeholder:text-3sm"
-            placeholder="Projects, subtasks , teams and so on"
+            placeholder="Search ..."
             name="search"
             value={inputChange.inputValue}
             onChange={(e) => setInputChange({ inputValue: e.target.value })}
@@ -212,7 +209,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             <Sun size={20} strokeWidth={2} stroke="white" />
           )}
         </div>
-
         <div
           className="lg:flex hidden"
           onMouseEnter={() => {
@@ -225,14 +221,12 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
           <Bell strokeWidth={2} size={20} stroke={color} />
           {notification ? <Notification /> : <></>}
         </div>
-
         {/*profile option*/}
         {token === null ? (
           <>
             <div onClick={() => setShowPage(true)}>
               <Button buttonName="Login" />
             </div>
-
             {/* LOGIN BACKDROP */}
             {showLoginPage && (
               <div className="fixed inset-0 z-50">
@@ -278,11 +272,11 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         ) : (
           <div ref={profileRef}>
             <img
-                src={
-                  navitems?.profile
-                    ? navitems.profile
-                    : './Profile.png'
-                }
+              src={
+                navitems?.profile
+                  ? navitems.profile
+                  : './Profile.png'
+              }
               alt="Profile"
               className="md:w-10 md:h-10 sm:h-7 sm:w-7 w-6 h-7  rounded-full"
               onClick={() => {
@@ -291,11 +285,10 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             />
             {profileOption ? (
               <div
-                className={`fixed right-5 top-14 rounded-md w-fit p-6 flex flex-col gap-2 border  text-inherit ${
-                  mode
+                className={`fixed right-5 top-14 rounded-md w-fit p-6 flex flex-col gap-2 border  text-inherit ${mode
                     ? "border-black/20 bg-[#f8f9fa]"
                     : "border-white/25 bg-[#242528]"
-                }`}
+                  }`}
               >
                 {/* <div className="flex gap-2 items-center">
                   <User size={16} />
@@ -309,13 +302,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                     Settting
                   </span>
                 </div> */}
-                  <div className="flex gap-4 items-center">
-                    <img src={user.avatarUrl} alt="profile" className="h-10 w-10 rounded-full"/>
-                    <span className="tracking-wide font-poppins text-lg antialiased">
-                      {user.name}
-                    </span>
-                  </div>
-                  <hr className="text-gray-300"/>
+                <div className="flex gap-4 items-center">
+                  <img src={user?.avatarUrl} alt="profile" className="h-10 w-10 rounded-full" />
+                  <span className="tracking-wide font-poppins text-lg antialiased">
+                    {user?.name}
+                  </span>
+                </div>
+                <hr className="text-gray-300" />
                 <div className="flex flex-col gap-3">
                   <h1 className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center">
                     <Palette size={16} />
@@ -349,7 +342,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                   </div>
                   <div
                     className="tracking-wide font-poppins text-sm antialiased flex gap-2 items-center cursor-pointer"
-                    onClick={() => localStorage.removeItem('token')}
+                    onClick={() => { localStorage.removeItem('token'); dispatch(logout()); toast.success("Logout successful"); }}
                   >
                     <LogOut size={16} />
                     Logout
@@ -378,17 +371,15 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
       {MobileMenu ? (
         <>
           <div
-            className={`fixed inset-0 z-40 ${
-              mode ? " bg-black/5" : "bg-white/10"
-            }`}
+            className={`fixed inset-0 z-40 ${mode ? " bg-black/5" : "bg-white/10"
+              }`}
             onClick={() => setMobileMenu(false)}
           />
 
           {/* Mobile Drawer */}
           <div
-            className={`fixed top-0 right-0 z-50 h-full w-3/4 sm:w-1/2 md:w-1/3   shadow-lg transform transition-transform duration-300 ease-in-out ${
-              MobileMenu ? "translate-x-0" : "translate-x-full"
-            } ${mode ? "bg-white text-inherit" : "bg-black text-inherit"}`}
+            className={`fixed top-0 right-0 z-50 h-full w-3/4 sm:w-1/2 md:w-1/3   shadow-lg transform transition-transform duration-300 ease-in-out ${MobileMenu ? "translate-x-0" : "translate-x-full"
+              } ${mode ? "bg-white text-inherit" : "bg-black text-inherit"}`}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-300">

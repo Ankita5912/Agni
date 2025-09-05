@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LayoutDashboard, Rocket, Users, ArrowUpRight, Group, LogOut } from "lucide-react";
 import type { RootState } from "../Redux/Reducers/rootReducer";
@@ -16,6 +16,7 @@ interface SidebarProp {
 
 export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
   const mode = useSelector((state: RootState) => state.mode.mode);
+  const token = useSelector((state :RootState)=> state.auth.token)
   const [openIndex, setOpenIndex] = useState<number | null>(1);
   const Project = useSelector(
     (state: RootState) => state.Project.projects
@@ -25,13 +26,16 @@ export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(fetchProjects());
-    dispatch(fetchTeams())
-  }, [dispatch]);
+    if (token) {
+      dispatch(fetchProjects(token));
+      dispatch(fetchTeams(token))
+    }
+  }, [token, dispatch]);
 
-  const toggleSubitems = (index: number) => {
+  // ✅ Toggle subitems (memoized to prevent re-creation)
+  const toggleSubitems = useCallback((index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
-  };
+  }, []);
 
   interface SubItem {
     heading?: string;
@@ -46,76 +50,39 @@ export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
     icon: JSX.Element;
   }
 
-  interface NavItem {
-    NavsubItems: NavSubItem[];
-    profile: string;
-  }
 
-
-  useEffect(() => {
-    setNavsubItems([
-      {
-        text: "Dashboard",
-        path: "/kanban/dashboard",
-        pathExists: true,
-        subitems: [],
-        icon: <LayoutDashboard size={16} />,
-      },
-      {
-        text: "Projects",
-        path: "/kanban/project",
-        pathExists: false,
-        subitems: Project.map((proj) => ({
-          heading: proj.heading,
-          path: `/kanban/project/${proj._id}`,
-        })),
-        icon: <Rocket size={16} />,
-      },
-      {
-        text: "Teams",
-        path: "/teams",
-        pathExists: false,
-        subitems: team.map((team) => ({
-          heading: team.teamId,
-          path: `/teams/${team.teamId}`,
-        })),
-        icon: <Users size={16} />,
-      },
-    ]);
-  }, [Project, team]);
-
-  const navitems: NavItem = {
-    NavsubItems: [
-      {
-        text: "Dashboard",
-        path: "/kanban/dashboard",
-        pathExists: true,
-        subitems: team.map((team) => ({
-          heading: team.teamId,
-          path: `/teams/${team.teamId}`,
-        })),
-        icon: <LayoutDashboard size={16} />,
-      },
-      {
-        text: "Projects",
-        path: "/kanban/project",
-        pathExists: false,
-        subitems: Project.map((proj) => ({
-          heading: proj.heading,
-          path: `/kanban/project/${proj._id}`,
-        })),
-        icon: <Rocket size={16} />,
-      },
-      {
-        text: "Teams",
-        path: "/teams",
-        pathExists: false,
-        subitems: [],
-        icon: <Users size={16} />,
-      },
-    ],
-    profile: "",
-  };
+  //here the navsubitems are changing on every render and when team and project change in useEffect then the navsubitems are set in useState hook to change this its state
+  //so it is rendering when useEffect called when component mounts + when state changes due to change in projects
+  //basically state is changing due to useEffect dependency so here we can use useMemo hook to change the state once only when projects and teams changing
+  const navsubItems = useMemo < NavSubItem[]>(() => [
+    {
+      text: "Dashboard",
+      path: "/kanban/dashboard",
+      pathExists: true,
+      subitems: [],
+      icon: <LayoutDashboard size={16} />,
+    },
+    {
+      text: "Projects",
+      path: "/kanban/project",
+      pathExists: false,
+      subitems: Project.map((proj) => ({
+        heading: proj.heading,
+        path: `/kanban/project/${proj._id}`,
+      })),
+      icon: <Rocket size={16} />,
+    },
+    {
+      text: "Teams",
+      path: "/teams",
+      pathExists: false,
+      subitems: team.map((team) => ({
+        heading: team.teamId,
+        path: `/teams/${team.teamId}`,
+      })),
+      icon: <Users size={16} />,
+    },
+  ], [Project, team]);
 
   const projectIcons = [
     "/projectIcon1.png",
@@ -127,17 +94,6 @@ export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
   const randomProjectIcons = Math.floor(Math.random() * projectIcons.length);
   const randomImageUrl = projectIcons[randomProjectIcons];
 
-  const [navsubItems, setNavsubItems] = useState<NavSubItem[]>(
-    navitems.NavsubItems
-  );
-
-  const handleLink = (index: number) => {
-    const updated = navsubItems.map((item, i) => ({
-      ...item,
-      isActive: i === index,
-    }));
-    setNavsubItems(updated);
-  };
 
   //mode ? "bg-[#f8f9fa]" : "bg-[#242528]"
   return (
@@ -154,7 +110,6 @@ export default function Sidebar({ value, teamFormstatus }: SidebarProp) {
             {item.pathExists ? (
               <NavLink
                 to={item.path}
-                onClick={() => handleLink(index)}
                 className={({ isActive }) =>
                   `flex flex-row gap-2 items-center transition-colors duration-200 antialiased tracking-wide font-poppins text-sm rounded-sm p-1.5 ${
                     isActive

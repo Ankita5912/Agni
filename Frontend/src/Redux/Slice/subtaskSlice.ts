@@ -1,8 +1,7 @@
-// src/redux/subtaskSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import type { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
+import type { RootState } from "../Reducers/rootReducer"
 
 //  Subtask type
 export interface SubtaskType {
@@ -12,7 +11,7 @@ export interface SubtaskType {
   startDate?: Date;
   deadline?: Date;
   assignedTo?: string;
-  projectId: string | undefined; //link subtask to project
+  projectId: string | undefined;
 }
 
 interface SubtaskState {
@@ -27,147 +26,143 @@ const initialState: SubtaskState = {
   error: null,
 };
 
-const token = localStorage.getItem('token')
-
 // ✅ Fetch subtasks for a project
 export const fetchSubtasks = createAsyncThunk<
   SubtaskType[],
-  string | undefined
+  string | undefined,
+  { state: RootState }
 >("subtasks/fetchByProject", async (projectId, thunkAPI) => {
+  const token = thunkAPI.getState().auth.token;
   try {
     const res = await axios.get(
-      `https://agni-9mw4.onrender.com/api/projects/${projectId}/subtasks`,{
-      headers: {
-        'Authorization': `Bearer ${token}`
+      `https://agni-9mw4.onrender.com/api/projects/${projectId}/subtasks`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    }
     );
     return res.data;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to fetch projects"
+      error.response?.data?.message || "Failed to fetch subtasks"
     );
   }
 });
 
-// ✅ Create subtask inside a project
+// ✅ Create subtask
 export const createSubtask = createAsyncThunk<
   SubtaskType,
-  { projectId: string; subtask: Omit<SubtaskType, "_id" | "projectId"> }
+  { projectId: string; subtask: Omit<SubtaskType, "_id" | "projectId"> },
+  { state: RootState }
 >("subtasks/create", async ({ projectId, subtask }, thunkAPI) => {
+  const token = thunkAPI.getState().auth.token;
   try {
     const res = await axios.post(
       `https://agni-9mw4.onrender.com/api/projects/${projectId}/subtasks`,
-      subtask, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      subtask,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    }
     );
     return res.data;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to fetch projects"
+      error.response?.data?.message || "Failed to create subtask"
     );
   }
 });
 
-//Update subtask (uuid comes from params)
+// ✅ Update subtask
 export const updateSubtask = createAsyncThunk<
   SubtaskType,
-  { uuid: string; updates: Partial<Omit<SubtaskType, "_id" | "projectId">> }
->("subtasks/update", async ({ uuid,  updates }, thunkAPI) => {
+  { uuid: string; updates: Partial<Omit<SubtaskType, "_id" | "projectId">> },
+  { state: RootState }
+>("subtasks/update", async ({ uuid, updates }, thunkAPI) => {
+  const token = thunkAPI.getState().auth.token;
   try {
     const res = await axios.patch(
-      `https://agni-9mw4.onrender.com/api/projects/subtasks/${uuid}`, // 🔹 uuid passed in params
-      updates, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      `https://agni-9mw4.onrender.com/api/projects/subtasks/${uuid}`,
+      updates,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    }
     );
-    console.log(res.data);
     return res.data;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
     return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to fetch projects"
+      error.response?.data?.message || "Failed to update subtask"
     );
   }
 });
 
-// Delete subtask (uuid comes from params)
-export const deleteSubtask = createAsyncThunk<string, string>(
-  "subtasks/delete",
-  async (uuid, thunkAPI) => {
-    try {
-      await axios.delete(`https://agni-9mw4.onrender.com/api/projects/subtasks/${uuid}`, {
+// ✅ Delete subtask
+export const deleteSubtask = createAsyncThunk<
+  string,
+  string,
+  { state: RootState }
+>("subtasks/delete", async (uuid, thunkAPI) => {
+  const token = thunkAPI.getState().auth.token;
+  try {
+    await axios.delete(
+      `https://agni-9mw4.onrender.com/api/projects/subtasks/${uuid}`,
+      {
         headers: {
-        'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+        },
       }
-      }); // 🔹 uuid passed in params
-      return uuid; // return deleted id
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch projects"
-      );
-    }
+    );
+    return uuid;
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>;
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.message || "Failed to delete subtask"
+    );
   }
-);
+});
 
 const subtaskSlice = createSlice({
   name: "subtasks",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // 🔹 fetch
-    builder.addCase(fetchSubtasks.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(
-      fetchSubtasks.fulfilled,
-      (state, action: PayloadAction<SubtaskType[]>) => {
+    builder
+      .addCase(fetchSubtasks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchSubtasks.fulfilled,
+        (state, action: PayloadAction<SubtaskType[]>) => {
+          state.loading = false;
+          state.subtasks = action.payload;
+        }
+      )
+      .addCase(fetchSubtasks.rejected, (state, action) => {
         state.loading = false;
-        state.subtasks = action.payload;
-      }
-    );
-    builder.addCase(fetchSubtasks.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
-
-    // 🔹 create
-    builder.addCase(
-      createSubtask.fulfilled,
-      (state, action: PayloadAction<SubtaskType>) => {
+        state.error = action.payload as string;
+      })
+      .addCase(createSubtask.fulfilled, (state, action) => {
         state.subtasks.push(action.payload);
-      }
-    );
-
-    // 🔹 update
-    builder.addCase(
-      updateSubtask.fulfilled,
-      (state, action: PayloadAction<SubtaskType>) => {
+      })
+      .addCase(updateSubtask.fulfilled, (state, action) => {
         const idx = state.subtasks.findIndex(
           (s) => s._id === action.payload._id
         );
         if (idx !== -1) state.subtasks[idx] = action.payload;
-      }
-    );
-
-    // 🔹 delete
-    builder.addCase(
-      deleteSubtask.fulfilled,
-      (state, action: PayloadAction<string>) => {
+      })
+      .addCase(deleteSubtask.fulfilled, (state, action) => {
         state.subtasks = state.subtasks.filter(
           (s) => s._id !== action.payload
         );
-      }
-    );
+      });
   },
 });
 

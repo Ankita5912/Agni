@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 
 export default function CreateTeamForm() {
   const mode = useSelector((state: RootState) => state.mode.mode);
-  const token = localStorage.getItem("token");
+  const token = useSelector((state :RootState)=>state.auth.token);
   const dispatch = useDispatch<AppDispatch>();
   const [options, setOptions] = useState<{ value: string; label: string }[]>(
     []
@@ -89,7 +89,7 @@ export default function CreateTeamForm() {
 
   const submit = async (data: SchemaType) => {
     try {
-      const resultAction = await dispatch(createTeam(data));
+      const resultAction = await dispatch(createTeam({ teamData: data, token } ));
       console.log(resultAction);
       
         const payload = resultAction.payload as { message?: string } | string;

@@ -71,10 +71,6 @@ export default function HomePage() {
           >
             Manage Your Projects the Agile Way — Seamlessly
           </h1>
-
-
-
-
         </div>
         <section className="flex items-center justify-center max-w-4xl  md:mt-15 mt-10 ">
           <img src="./Kanban.png" alt="agni" className={`shadow-[-2px_-2px_20px_var(--primary-color),2px_-2px_20px_var(--primary-color)] border border-0.5 rounded-2xl   ${mode ? "border-[#f8f9fabe]" : "border-[#242528]"
@@ -138,7 +134,7 @@ export default function HomePage() {
         </h3>
         <div className="grid md:grid-cols-2 gap-6">
           {/* AI Integration */}
-          <Card className={`border  rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-md ${mode ? 'border-gray-200' : ''}`}>
+          <Card className={`border  rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-md ${mode ? "bg-white/70 border-gray-200" : "bg-[#1a1b1e]/60 border-gray-800"}`}>
             <CardContent className="p-6 flex flex-col items-start">
               <div className="flex gap-2 items-center">
                 <div className={`flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${mode ? 'bg-indigo-100' :'bg-indigo-900'}`}>
@@ -158,7 +154,7 @@ export default function HomePage() {
           </Card>
 
           {/* Sprints */}
-          <Card className={`border  rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 backdrop-blur-3xl ${mode ?'border-gray-200':''}`}>
+          <Card className={`border  rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 backdrop-blur-3xl ${mode ? "bg-white/70 border-gray-200" : "bg-[#1a1b1e]/60 border-gray-800"}`}>
             <CardContent className="p-6 flex flex-col items-start">
               <div className="flex gap-2 items-center">
                 <div className={`flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${mode ? 'bg-indigo-100' : 'bg-indigo-900'}`}>
